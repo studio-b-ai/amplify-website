@@ -1,1166 +1,1462 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amplify by Studio B — LinkedIn Intelligence for Agencies</title>
-<meta name="description" content="Amplify watches your LinkedIn signals, drafts in your operator-calibrated voice, waits for a Slack thumbs-up, and publishes. Intent in. Voice out. Approval in between.">
-<meta property="og:title" content="Amplify by Studio B — LinkedIn Intelligence for Agencies">
-<meta property="og:description" content="Intent in. Voice out. Approval in between. The one LinkedIn workflow for agencies and operators.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://amplify.b.studio">
-<link rel="canonical" href="https://amplify.b.studio">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amplify by Studio B — LinkedIn Intelligence for Agencies</title>
+  <meta name="description" content="Signal to publish in one loop. Amplify scores LinkedIn intent, drafts in your voice, and waits for your Slack approval before anything posts. In production on 5 brands.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
 
-<!-- HubSpot Tracking -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/49070660.js"></script>
+  <style>
+    :root {
+      --white:        #FFFFFF;
+      --ground:       #FAFAFA;
+      --surface:      #F5F3FF;
+      --surface-alt:  #F9FAFB;
 
-<style>
-/* ══════════════════════════════════════════════════
-   Amplify — agency/operator ICP rewrite.
-   Electric Violet #7C3AED spot. Inter 900 display.
-   Plus Jakarta Sans body. JetBrains Mono labels.
-   Comic Book DNA: border-radius: 0 throughout.
-   ══════════════════════════════════════════════════ */
+      --violet:       #7C3AED;
+      --violet-dark:  #6D28D9;
+      --violet-deep:  #0F0A1E;
+      --violet-15:    rgba(124,58,237,0.15);
+      --violet-08:    rgba(124,58,237,0.08);
+      --violet-04:    rgba(124,58,237,0.04);
 
-:root {
-  --paper: #F4F1EB;
-  --paper-dim: #ECE7DD;
-  --surface: #FFFFFF;
-  --rule: rgba(26,24,20,0.10);
-  --rule-light: rgba(26,24,20,0.07);
+      --ink:          #0F0A1E;
+      --ink-60:       rgba(15,10,30,0.60);
+      --ink-40:       rgba(15,10,30,0.40);
 
-  --violet: #7C3AED;
-  --violet-mid: #6D28D9;
-  --violet-deep: #4C1D95;
-  --violet-dim: rgba(124,58,237,0.08);
+      --border:       #E8E4F5;
+      --border-mid:   #D4CCF0;
+    }
 
-  --forest: #1F3B2E;
-  --forest-ink: #0F1A14;
-  --forest-15: rgba(31,59,46,0.15);
-  --forest-06: rgba(31,59,46,0.06);
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  --ink: #1A1814;
-  --ink-70: rgba(26,24,20,0.70);
-  --ink-dim: #6A6258;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--ground);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 400;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-  position: relative;
-}
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
 
-/* Paper grain */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.28;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-}
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
 
-/* Animations */
-@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes drawLine { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    .nav-brand-mark {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+    }
 
-/* ── Dispatch strip ── */
-.dispatch {
-  background: var(--forest);
-  color: var(--paper);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 400;
-}
-.dispatch-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0.55rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-.dispatch-left { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-.form-id { color: var(--violet); font-weight: 600; }
-.dispatch-sep { opacity: 0.4; }
-.dispatch-right { opacity: 0.6; }
+    .nav-brand-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
 
-/* ── Nav ── */
-nav {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-nav::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 2.5rem; right: 2.5rem;
-  height: 2px;
-  background: var(--forest);
-  transform-origin: left;
-  animation: drawLine 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-}
+    .nav-brand-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-40);
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
-  color: var(--forest);
-}
-.brand-mark { width: 32px; height: 32px; flex-shrink: 0; }
-.brand-name {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--forest);
-  line-height: 1;
-}
-.brand-sub {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.55rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-  padding-left: 0.75rem;
-  border-left: 1px solid var(--rule);
-  line-height: 1;
-  align-self: center;
-}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
 
-.nav-links { display: flex; gap: 1.8rem; align-items: center; }
-.nav-links a {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--ink-70);
-  text-decoration: none;
-  transition: color 0.2s;
-  letter-spacing: 0.01em;
-}
-.nav-links a:hover { color: var(--forest); }
-.nav-cta {
-  color: #fff !important;
-  background: var(--violet) !important;
-  padding: 0.52rem 1.25rem;
-  border-radius: 0;
-  font-weight: 600 !important;
-  transition: background 0.2s !important;
-}
-.nav-cta:hover { background: var(--violet-mid) !important; }
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--ink-60);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
 
-.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
-.nav-toggle span { display: block; width: 22px; height: 2px; background: var(--forest); margin: 4px 0; transition: all 0.3s; }
+    .nav-links a:hover {
+      color: var(--ink);
+    }
 
-/* ── Hero ── */
-.hero {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 5rem 2.5rem 4rem;
-}
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      border: 1.5px solid transparent;
+      white-space: nowrap;
+    }
 
-.hero-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.63rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--violet);
-  margin-bottom: 1.5rem;
-  animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-}
+    .btn-primary {
+      background: var(--violet);
+      color: var(--white);
+      border-color: var(--violet);
+    }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 4rem;
-  align-items: start;
-}
+    .btn-primary:hover {
+      background: var(--violet-dark);
+      border-color: var(--violet-dark);
+    }
 
-.hero-left { animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+    .btn-outline {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--border-mid);
+    }
 
-.hero h1 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: clamp(2.6rem, 5.2vw, 4.2rem);
-  line-height: 0.95;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  color: var(--forest);
-  margin-bottom: 1.8rem;
-}
-.hero h1 .voice-highlight {
-  background: var(--violet);
-  color: #fff;
-  padding: 0 0.08em;
-  display: inline;
-}
-.hero h1 .arrow { color: var(--violet); }
+    .btn-outline:hover {
+      border-color: var(--violet);
+      color: var(--violet);
+    }
 
-.hero-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.02rem;
-  line-height: 1.72;
-  color: var(--ink-70);
-}
-.hero-body p + p { margin-top: 1.1rem; }
+    /* ── Hero ── */
+    .hero {
+      background: var(--white);
+      padding: 6rem 2rem 5rem;
+    }
 
-/* Approval card */
-.approval-card {
-  background: var(--surface);
-  border: 1.5px solid var(--forest);
-  border-radius: 0;
-  overflow: hidden;
-  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-}
-.card-header {
-  background: var(--forest);
-  color: var(--paper);
-  padding: 0.75rem 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.card-status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--violet);
-  flex-shrink: 0;
-}
-.card-entry { opacity: 0.6; }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: 4rem;
+      align-items: center;
+    }
 
-.card-body { padding: 1.2rem 1.4rem; }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 1.5rem;
+    }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.3rem 1rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  margin-bottom: 1.2rem;
-}
-.cg-key {
-  color: var(--ink-dim);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.62rem;
-  padding-top: 0.12rem;
-  white-space: nowrap;
-}
-.cg-val { color: var(--forest); font-weight: 600; }
-.cg-val.violet { color: var(--violet); }
+    .hero-headline {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
 
-.card-draft {
-  background: var(--violet-dim);
-  border-left: 2px solid var(--violet);
-  padding: 0.85rem 1rem;
-  margin-bottom: 1.2rem;
-  font-family: 'Newsreader', serif;
-  font-style: italic;
-  font-size: 0.93rem;
-  line-height: 1.6;
-  color: var(--forest-ink);
-}
+    .hero-headline .underline-keyword {
+      position: relative;
+      display: inline;
+    }
 
-.card-actions {
-  display: flex;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-.btn-approve {
-  background: var(--violet);
-  color: #fff;
-  border: none;
-  border-radius: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-approve:hover { background: var(--violet-mid); }
-.btn-outline {
-  background: transparent;
-  color: var(--forest);
-  border: 1.5px solid var(--forest);
-  border-radius: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
-}
-.btn-outline:hover { border-color: var(--violet); color: var(--violet); }
+    .hero-headline .underline-keyword::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -0.1em;
+      width: 100%;
+      height: 4px;
+      background: var(--violet);
+    }
 
-.card-footnote {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  color: var(--ink-dim);
-  line-height: 1.55;
-  border-top: 1px solid var(--rule);
-  padding-top: 0.75rem;
-}
+    .hero-sub {
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink-60);
+      line-height: 1.65;
+      max-width: 52ch;
+      margin-bottom: 2rem;
+    }
 
-/* ── Section utility ── */
-.section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 5rem 2.5rem;
-}
-.section-rule { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
-.section-rule hr { border: none; height: 1px; background: var(--rule); }
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
 
-.section-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.63rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--violet);
-  margin-bottom: 0.9rem;
-}
+    .hero-cta-row .btn {
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+    }
 
-.section-title {
-  font-family: 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  line-height: 0.97;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  color: var(--forest);
-  margin-bottom: 0.9rem;
-}
+    .hero-trust {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-40);
+    }
 
-.section-intro {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1rem;
-  color: var(--ink-70);
-  max-width: 640px;
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-}
+    /* ── Approval Card ── */
+    .approval-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(124,58,237,0.10);
+    }
 
-.fade-in {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.fade-in.visible { opacity: 1; transform: translateY(0); }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.875rem 1.125rem;
+      border-bottom: 1px solid var(--border);
+    }
 
-/* ── Layer panel grid ── */
-.layer-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 1.5px solid var(--forest);
-  border-radius: 0;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-.layer-cell {
-  padding: 1.8rem 1.5rem;
-  border-right: 1px solid var(--rule);
-  transition: background 0.2s;
-}
-.layer-cell:last-child { border-right: none; }
-.layer-cell:hover { background: var(--violet-dim); }
-.layer-num {
-  font-family: 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: 1.75rem;
-  color: var(--violet);
-  line-height: 1;
-  margin-bottom: 0.4rem;
-}
-.layer-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--forest);
-  margin-bottom: 0.6rem;
-}
-.layer-desc {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--ink-70);
-}
+    .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-60);
+    }
 
-.layer-status-bar {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.64rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.75rem 1.2rem;
-  background: var(--forest-06);
-  border: 1px solid var(--rule);
-  border-radius: 0;
-}
-.ls-item { display: flex; align-items: center; gap: 0.4rem; }
-.ls-live { color: #0A6E3F; }
-.ls-pending { color: var(--ink-dim); }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--violet);
+      flex-shrink: 0;
+    }
 
-/* ── Moat section ── */
-.moat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
-  align-items: start;
-}
+    .card-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-40);
+    }
 
-.problem-list { list-style: none; padding: 0; counter-reset: prob; }
-.problem-list li {
-  counter-increment: prob;
-  display: grid;
-  grid-template-columns: 2.2rem 1fr;
-  gap: 0.8rem;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid var(--rule);
-  align-items: baseline;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.95rem;
-  color: var(--ink-70);
-  line-height: 1.55;
-}
-.problem-list li:last-child { border-bottom: none; }
-.problem-list li::before {
-  content: counter(prob);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--ink-dim);
-  letter-spacing: 0.08em;
-  padding-top: 0.08rem;
-}
+    .card-meta {
+      padding: 0.875rem 1.125rem;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.3rem 1rem;
+      align-items: center;
+    }
 
-.solution-list { list-style: none; padding: 0; }
-.solution-item {
-  padding: 1rem 1.1rem;
-  border-left: 2px solid var(--violet);
-  margin-bottom: 0.7rem;
-  background: var(--violet-dim);
-  border-radius: 0;
-}
-.sol-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--violet);
-  margin-bottom: 0.25rem;
-}
-.sol-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--forest);
-}
+    .meta-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-40);
+      white-space: nowrap;
+    }
 
-/* ── Pricing ── */
-.tiers {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.2rem;
-  margin-top: 2.5rem;
-}
-.tier {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 0;
-  padding: 2rem 1.7rem 1.8rem;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-}
-.tier:hover {
-  transform: translateY(-3px);
-  border-color: var(--forest-15);
-  box-shadow: 0 8px 28px var(--forest-06);
-}
-.tier.featured {
-  border-color: var(--forest);
-  border-top: 3px solid var(--violet);
-}
-.tier-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--violet);
-  margin-bottom: 0.6rem;
-}
-.tier-name {
-  font-family: 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: 1.2rem;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
-  color: var(--forest);
-  margin-bottom: 0.7rem;
-}
-.tier-price {
-  font-family: 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: 2.4rem;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--forest);
-  margin-bottom: 0.25rem;
-}
-.tier-price .unit {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.48em;
-  font-weight: 400;
-  color: var(--ink-dim);
-  letter-spacing: 0.04em;
-}
-.tier-audience {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.85rem;
-  color: var(--ink-70);
-  margin-bottom: 1.4rem;
-  line-height: 1.55;
-  min-height: 2.8em;
-}
-.tier-features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 auto 0;
-  border-top: 1px solid var(--rule);
-  padding-top: 0.9rem;
-}
-.tier-features li {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.87rem;
-  color: var(--ink-70);
-  padding: 0.4rem 0;
-  line-height: 1.5;
-}
-.tier-features li::before {
-  content: '·';
-  color: var(--violet);
-  font-weight: 700;
-  margin-right: 0.5em;
-}
-.tier-note {
-  margin-top: 1.4rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--rule);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.64rem;
-  letter-spacing: 0.05em;
-  color: var(--ink-dim);
-  line-height: 1.55;
-}
+    .meta-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--ink-60);
+    }
 
-/* ── In Production ── */
-.founder-card {
-  background: var(--surface);
-  border-left: 3px solid var(--violet);
-  padding: 2.4rem 2.6rem;
-  margin-bottom: 2rem;
-  max-width: 820px;
-  border-radius: 0;
-  box-shadow: 0 8px 28px var(--forest-06);
-}
-.founder-quote {
-  font-family: 'Newsreader', serif;
-  font-style: italic;
-  font-size: 1.25rem;
-  line-height: 1.6;
-  color: var(--forest);
-  margin-bottom: 1rem;
-}
-.founder-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.72;
-  color: var(--ink-70);
-}
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-.stats-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--forest);
-  padding: 1rem 1.4rem;
-  background: var(--forest-06);
-  border: 1px solid var(--rule);
-  border-radius: 0;
-  margin-bottom: 1.5rem;
-}
-.stats-sep { color: rgba(26,24,20,0.18); }
+    .score-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+    }
 
-.founder-sig {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-.sig-name {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--forest);
-}
-.sig-role {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
+    .score-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--violet-15);
+      position: relative;
+      overflow: hidden;
+    }
 
-/* ── CTA / Waitlist ── */
-.cta-grid {
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: 4rem;
-  align-items: start;
-  margin-top: 2.5rem;
-}
-.cta-form { min-height: 480px; }
+    .score-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 87%;
+      background: var(--violet);
+    }
 
-.cta-onboard {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-top: 3px solid var(--forest);
-  border-radius: 0;
-  padding: 1.8rem 1.6rem;
-}
-.cta-onboard h3 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 900;
-  font-size: 1.05rem;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
-  color: var(--forest);
-  margin-bottom: 0.6rem;
-}
-.cta-onboard p {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.88rem;
-  color: var(--ink-70);
-  line-height: 1.65;
-  margin-bottom: 1.2rem;
-}
-.onboard-list { list-style: none; padding: 0; border-top: 1px solid var(--rule); }
-.onboard-list li {
-  padding: 0.65rem 0;
-  border-bottom: 1px dashed var(--rule-light);
-  display: grid;
-  grid-template-columns: 8.5rem 1fr;
-  gap: 0.8rem;
-  align-items: baseline;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-}
-.onboard-list li:last-child { border-bottom: none; }
-.ob-label {
-  color: var(--ink-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.62rem;
-}
-.ob-value { color: var(--forest); font-weight: 600; }
+    .card-draft {
+      padding: 1rem 1.125rem;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--ink-60);
+      line-height: 1.6;
+    }
 
-/* ── Footer ── */
-footer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2.5rem;
-  border-top: 2px solid var(--forest);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2rem;
-  align-items: start;
-}
-footer .f-copy {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  line-height: 1.65;
-  color: var(--ink-dim);
-  letter-spacing: 0.04em;
-  max-width: 620px;
-}
-footer .f-links { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
-footer .f-links a {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--ink-dim);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-footer .f-links a:hover { color: var(--forest); }
+    .card-actions {
+      padding: 0.875rem 1.125rem;
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
 
-/* ── HubSpot form overrides ── */
-.hs-form-amplify .hs-input {
-  background: var(--surface) !important;
-  border: 1px solid rgba(26,24,20,0.18) !important;
-  border-radius: 0 !important;
-  color: var(--ink) !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-  font-size: 0.95rem !important;
-  font-weight: 400 !important;
-  padding: 0.8rem 1rem !important;
-  width: 100% !important;
-}
-.hs-form-amplify .hs-input:focus {
-  border-color: var(--violet) !important;
-  outline: none !important;
-  box-shadow: 0 0 0 2px var(--violet-dim) !important;
-}
-.hs-form-amplify .hs-input::placeholder { color: var(--ink-dim) !important; }
-.hs-form-amplify label {
-  color: var(--forest) !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 0.68rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.12em !important;
-  text-transform: uppercase !important;
-  margin-bottom: 0.35rem !important;
-  display: block !important;
-}
-.hs-form-amplify .hs-button {
-  background: var(--violet) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 0 !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-  font-size: 0.94rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.01em !important;
-  padding: 0.9rem 2rem !important;
-  cursor: pointer !important;
-  transition: background 0.2s !important;
-  width: 100% !important;
-  margin-top: 0.5rem !important;
-}
-.hs-form-amplify .hs-button:hover { background: var(--violet-mid) !important; }
-.hs-form-amplify .hs-form-field { margin-bottom: 0.9rem !important; }
-.hs-form-amplify .hs-error-msg { color: #B8342A !important; font-size: 0.8rem !important; }
-.hs-form-amplify textarea.hs-input { min-height: 90px !important; resize: vertical !important; }
-.hs-form-amplify .form-columns-1,
-.hs-form-amplify .form-columns-2,
-.hs-form-amplify .form-columns-3 { display: block !important; }
-.hs-form-amplify .form-columns-2 > .hs-form-field,
-.hs-form-amplify .form-columns-3 > .hs-form-field { width: 100% !important; float: none !important; padding-right: 0 !important; }
-.hs-form-amplify .hs-form-field > .input { margin-right: 0 !important; }
-.hs-form-amplify .hs-form-field .input > .hs-input { width: 100% !important; }
+    .card-actions .btn {
+      font-size: 0.78rem;
+      padding: 0.45rem 0.875rem;
+    }
 
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-  .layer-grid { grid-template-columns: repeat(2, 1fr); }
-  .layer-cell { border-right: none; border-bottom: 1px solid var(--rule); }
-  .layer-cell:last-child { border-bottom: none; }
-}
-@media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 2.8rem; }
-  .moat-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  .tiers { grid-template-columns: 1fr; }
-  .cta-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  footer { grid-template-columns: 1fr; }
-  .layer-status-bar { gap: 1.2rem; }
-}
-@media (max-width: 640px) {
-  nav { padding: 1.2rem 1.5rem; }
-  nav::after { left: 1.5rem; right: 1.5rem; }
-  .nav-links { display: none; }
-  .nav-links.open {
-    display: flex; flex-direction: column;
-    position: absolute; top: 100%; left: 0; right: 0;
-    background: var(--paper);
-    padding: 1.4rem;
-    border-bottom: 2px solid var(--forest);
-    gap: 1rem; z-index: 50;
-  }
-  .nav-toggle { display: block; }
-  .hero { padding: 3.5rem 1.5rem 2.8rem; }
-  .section { padding: 3.5rem 1.5rem; }
-  .section-rule { padding: 0 1.5rem; }
-  .dispatch-inner { padding: 0.5rem 1.5rem; }
-  .layer-grid { grid-template-columns: 1fr; }
-  footer { padding: 2rem 1.5rem; }
-  .brand-sub { display: none; }
-}
-</style>
+    .card-footer {
+      padding: 0.5rem 1.125rem 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-40);
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      background: var(--violet-deep);
+      padding: 2.5rem 2rem;
+    }
+
+    .stats-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .stat-item + .stat-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10%;
+      height: 80%;
+      width: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .stat-number {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 2.4rem;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ── Sections general ── */
+    .section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .section-intro {
+      font-size: 1.05rem;
+      color: var(--ink-60);
+      line-height: 1.65;
+      max-width: 60ch;
+      margin-bottom: 3rem;
+    }
+
+    /* ── Section 01 — How It Works ── */
+    .section-how {
+      background: var(--white);
+    }
+
+    .layers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-bottom: 2rem;
+    }
+
+    .layer-cell {
+      background: var(--ground);
+      padding: 2rem 1.5rem;
+    }
+
+    .layer-number {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .layer-number span {
+      color: var(--violet);
+      opacity: 0.3;
+    }
+
+    .layer-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .layer-desc {
+      font-size: 0.85rem;
+      color: var(--ink-60);
+      line-height: 1.6;
+    }
+
+    .status-strip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-40);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .dot-live {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      flex-shrink: 0;
+    }
+
+    .dot-pending {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border-mid);
+      flex-shrink: 0;
+    }
+
+    /* ── Section 02 — The Loop ── */
+    .section-loop {
+      background: var(--surface);
+    }
+
+    .loop-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .problem-list {
+      list-style: none;
+    }
+
+    .problem-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .problem-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .problem-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--violet);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .problem-text {
+      font-size: 0.925rem;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow-step {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      padding: 0.875rem 1.125rem;
+    }
+
+    .flow-step + .flow-step {
+      margin-top: -1px;
+    }
+
+    .flow-connector {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 1.5rem;
+      height: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--violet);
+    }
+
+    .flow-step-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.25rem;
+    }
+
+    .flow-step-desc {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ── Section 03 — Pricing ── */
+    .section-pricing {
+      background: var(--white);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+    }
+
+    .pricing-card {
+      background: var(--ground);
+      padding: 2rem;
+    }
+
+    .pricing-card.featured {
+      background: var(--surface);
+      border: 1.5px solid var(--violet-15);
+      border-top: 3px solid var(--violet);
+      margin: -1.5px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .pricing-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.75rem;
+      min-height: 1rem;
+    }
+
+    .pricing-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .pricing-price {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: 2rem;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .pricing-price span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink-40);
+      letter-spacing: 0;
+    }
+
+    .pricing-tagline {
+      font-size: 0.85rem;
+      color: var(--ink-60);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features li {
+      font-size: 0.85rem;
+      color: var(--ink-60);
+      padding: 0.35rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pricing-features li::before {
+      content: '·';
+      color: var(--violet);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Section 04 — In Production ── */
+    .section-production {
+      background: var(--violet-deep);
+    }
+
+    .section-production .section-label {
+      color: var(--violet);
+    }
+
+    .section-production .section-title {
+      color: var(--white);
+    }
+
+    .quote-card {
+      background: var(--white);
+      border-left: 3px solid var(--violet);
+      padding: 2rem 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .quote-text {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--ink-60);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .quote-sig-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .quote-sig-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-40);
+      margin-top: 0.2rem;
+    }
+
+    .production-brands {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .production-brands strong {
+      color: rgba(255,255,255,0.85);
+      font-weight: 600;
+    }
+
+    /* ── Section 05 — Request Access ── */
+    .section-access {
+      background: var(--white);
+    }
+
+    .access-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .form-wrap {
+      background: var(--ground);
+      padding: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    /* HubSpot form overrides */
+    .hs-form-amplify .hs-input {
+      width: 100% !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.9rem !important;
+      padding: 0.7rem 0.875rem !important;
+      border: 1.5px solid var(--border) !important;
+      border-radius: 0 !important;
+      background: var(--white) !important;
+      color: var(--ink) !important;
+      transition: border-color 0.2s !important;
+      outline: none !important;
+    }
+
+    .hs-form-amplify .hs-input:focus {
+      border-color: var(--violet) !important;
+    }
+
+    .hs-form-amplify .hs-button {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 0.9rem !important;
+      background: var(--violet) !important;
+      color: var(--white) !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0.75rem 1.5rem !important;
+      cursor: pointer !important;
+      transition: background 0.2s !important;
+    }
+
+    .hs-form-amplify .hs-button:hover {
+      background: var(--violet-dark) !important;
+    }
+
+    .hs-form-amplify label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.8rem !important;
+      font-weight: 500 !important;
+      color: var(--ink) !important;
+    }
+
+    .hs-form-amplify .hs-field-desc {
+      font-size: 0.75rem !important;
+      color: var(--ink-40) !important;
+    }
+
+    .hs-form-amplify .hs-error-msgs {
+      font-size: 0.75rem !important;
+      color: #DC2626 !important;
+      list-style: none !important;
+    }
+
+    .timeline-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+    }
+
+    .timeline-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .timeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+    }
+
+    .timeline-bullet {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--violet);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+
+    .timeline-bullet svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .timeline-week {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--violet);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-step-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+
+    .timeline-step-detail {
+      font-size: 0.8rem;
+      color: var(--ink-60);
+      line-height: 1.5;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--violet-deep);
+      padding: 2.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+      max-width: 50ch;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+      flex-shrink: 0;
+    }
+
+    .footer-links a {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+    }
+
+    /* ── Scroll animations ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .layers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .pricing-card.featured {
+        margin: 0;
+      }
+
+      .loop-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .access-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .stats-bar-inner {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem 0;
+      }
+
+      .stat-item + .stat-item::before {
+        display: none;
+      }
+
+      .layers-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ── Dispatch strip ── -->
-<div class="dispatch">
-  <div class="dispatch-inner">
-    <div class="dispatch-left">
-      <span><strong>AMPLIFY</strong></span>
-      <span class="dispatch-sep">·</span>
-      <span class="form-id">Form AMP-I</span>
-      <span class="dispatch-sep">·</span>
-      <span>Revision 17.04</span>
-      <span class="dispatch-sep">·</span>
-      <span>Build 4.17.01</span>
-      <span class="dispatch-sep">·</span>
-      <span>On File 17 Apr 2026</span>
-    </div>
-    <div class="dispatch-right">amplify.b.studio</div>
-  </div>
-</div>
+  <!-- ── Nav ── -->
+  <nav class="nav">
+    <a href="#" class="nav-brand">
+      <svg class="nav-brand-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+          d="M 3 10 L 7 12 L 3 14 L 4.5 12 Z
+             M 8.5 8 L 13.5 12 L 8.5 16 L 10.5 12 Z
+             M 15 6 L 21 12 L 15 18 L 17.5 12 Z"
+          fill="#0F0A1E" stroke="#7C3AED" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="nav-brand-name">Amplify</div>
+        <div class="nav-brand-sub">by Studio B</div>
+      </div>
+    </a>
 
-<!-- ── Nav ── -->
-<nav>
-  <a href="/" class="brand" aria-label="Amplify home">
-    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-      <path fill-rule="evenodd"
-        d="M 3 10 L 7 12 L 3 14 L 4.5 12 Z
-           M 8.5 8 L 13.5 12 L 8.5 16 L 10.5 12 Z
-           M 15 6 L 21 12 L 15 18 L 17.5 12 Z"
-        fill="#1F3B2E" stroke="#7C3AED" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
-    </svg>
-    <span class="brand-name">Amplify</span>
-    <span class="brand-sub">by Studio B</span>
-  </a>
-  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="nav-links">
-    <a href="#how-it-works">How It Works</a>
-    <a href="#moat">The Moat</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#in-production">In Production</a>
-    <a href="#waitlist" class="nav-cta">Request a Demo</a>
-  </div>
-</nav>
+    <ul class="nav-links">
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#the-loop">The Loop</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#in-production">In Production</a></li>
+    </ul>
 
-<!-- ── Hero ── -->
-<section class="hero">
-  <div class="hero-eyebrow">›_ Form AMP-I · Operator Product Brief</div>
-  <div class="hero-grid">
-    <div class="hero-left">
-      <h1>
-        INTENT IN.<br>
-        <span class="voice-highlight">VOICE</span> OUT.<br>
-        <span class="arrow">→</span> APPROVAL IN BETWEEN.
-      </h1>
-      <div class="hero-body">
-        <p>Amplify watches every channel where your audience signals. Drafts the post, comment, or DM in your operator-calibrated voice. Waits for a Slack thumbs-up. Publishes via your stack. Stamps the whole loop to an append-only ledger your team owns.</p>
-        <p>Most operators are stitching together five tools to do this. Amplify is the one workflow.</p>
+    <a href="#request-access" class="btn btn-primary">Get Early Access</a>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <p class="hero-eyebrow">Signal → Score → Draft → Approve → Publish</p>
+
+        <h1 class="hero-headline">
+          The LinkedIn<br>
+          <span class="underline-keyword">intelligence loop</span><br>
+          agencies actually ship.
+        </h1>
+
+        <p class="hero-sub">
+          Amplify watches every signal, scores intent, drafts in your calibrated voice,
+          and waits for a Slack thumbs-up before anything publishes. Intent in.
+          Voice out. Approval in between.
+        </p>
+
+        <div class="hero-cta-row">
+          <a href="#request-access" class="btn btn-primary">Get Early Access →</a>
+          <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+        </div>
+
+        <p class="hero-trust">In production · 5 brands · 35 signals/week · Layers 1–3 live</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="approval-card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="status-dot"></div>
+              Approval Pending
+            </div>
+            <div class="card-number">№ A-2026-0417</div>
+          </div>
+
+          <div class="card-meta">
+            <div class="meta-label">Signal</div>
+            <div class="meta-value">founder thread · 14 replies</div>
+
+            <div class="meta-label">Detected</div>
+            <div class="meta-value">17 Apr 2026 · 14:32 EDT</div>
+
+            <div class="meta-label">Voice</div>
+            <div class="meta-value">operator · calibrated 12 Apr</div>
+
+            <div class="meta-label">Score</div>
+            <div class="meta-value">
+              <div class="score-row">
+                <div class="score-label">8.7 / 10</div>
+                <div class="score-bar-track">
+                  <div class="score-bar-fill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-draft">
+            "Caught your post on hidden pricing. We unhid ours last quarter —
+            conversion ticked up, but call quality moved more. Sharing the
+            before/after if useful."
+          </div>
+
+          <div class="card-actions">
+            <a href="#request-access" class="btn btn-primary">Approve ✓</a>
+            <a href="#request-access" class="btn btn-outline">Edit</a>
+            <a href="#request-access" class="btn btn-outline">Skip</a>
+          </div>
+
+          <div class="card-footer">
+            Awaiting approval · #amplify-approvals
+          </div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Approval card -->
-    <div class="approval-card" role="complementary" aria-label="Example approval card">
-      <div class="card-header">
-        <div class="card-status">
-          <span class="status-dot"></span>
-          <span>Approval Pending</span>
-        </div>
-        <span class="card-entry">&#x2116; A-2026-0417-0842</span>
+  <!-- ── Stats Bar ── -->
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item">
+        <div class="stat-number">35</div>
+        <div class="stat-label">Signals/week</div>
       </div>
-      <div class="card-body">
-        <div class="card-grid">
-          <span class="cg-key">Signal</span>
-          <span class="cg-val">founder thread &middot; 14 replies, 2 in-ICP</span>
-          <span class="cg-key">Detected</span>
-          <span class="cg-val">17 Apr 2026 &middot; 14:32 EDT</span>
-          <span class="cg-key">Voice</span>
-          <span class="cg-val">operator &middot; calibrated 12 Apr</span>
-          <span class="cg-key">Score</span>
-          <span class="cg-val violet">8.7 / 10 &mdash; above 7.5 cutoff</span>
-        </div>
-        <div class="card-draft">
-          &ldquo;Caught your post on hidden pricing. We unhid ours last quarter &mdash; conversion ticked up, but call quality moved more. Sharing the before/after if useful.&rdquo;
-        </div>
-        <div class="card-actions">
-          <button class="btn-approve">Approve</button>
-          <button class="btn-outline">Edit</button>
-          <button class="btn-outline">Skip</button>
-        </div>
-        <div class="card-footnote">
-          Awaiting approval in #amplify-approvals &middot; Slack. No action fires until approved. Full ledger entry stamps on publish.
-        </div>
+      <div class="stat-item">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Brands live</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">8.7</div>
+        <div class="stat-label">Avg intent score</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">L1–L3</div>
+        <div class="stat-label">Running now</div>
       </div>
     </div>
   </div>
-</section>
 
-<div class="section-rule"><hr></div>
+  <!-- ── Section 01 — How It Works ── -->
+  <section class="section section-how" id="how-it-works">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">01 — How It Works</p>
+        <h2 class="section-title">Four layers. One approval gate.</h2>
+        <p class="section-intro">Amplify is a pipeline, not a point tool. Each layer has one job.</p>
+      </div>
 
-<!-- ── Section 01 — How It Works ── -->
-<section class="section fade-in" id="how-it-works">
-  <div class="section-eyebrow">01 &mdash; How It Works</div>
-  <div class="section-title">Four layers. One loop.</div>
-  <p class="section-intro">Amplify is a pipeline, not a point tool. Each layer has a distinct job. Layers 1&ndash;3 run live; Layer 4 lights up when LinkedIn approves the Community Management API.</p>
+      <div class="layers-grid fade-up">
+        <div class="layer-cell">
+          <div class="layer-number"><span>L1</span></div>
+          <div class="layer-name">Discover</div>
+          <div class="layer-desc">Six LinkedIn signals surface high-intent prospects. Everything saved to S3 CSV, timestamped and signed.</div>
+        </div>
+        <div class="layer-cell">
+          <div class="layer-number"><span>L2</span></div>
+          <div class="layer-name">Extract</div>
+          <div class="layer-desc">Post-Commenter and Liker phantoms extract enriched contact data. Results pushed to webhook-router, HMAC-signed.</div>
+        </div>
+        <div class="layer-cell">
+          <div class="layer-number"><span>L3</span></div>
+          <div class="layer-name">Score + Route</div>
+          <div class="layer-desc">Claude scores ICP fit, drafts in your voice, and posts to Slack with Approve / Edit / Skip. No publish without approval.</div>
+        </div>
+        <div class="layer-cell">
+          <div class="layer-number"><span>L4</span></div>
+          <div class="layer-name">Execute</div>
+          <div class="layer-desc">Approved actions fire through LinkedIn API as your authenticated identity. Every action writes to the HMAC audit ledger.</div>
+        </div>
+      </div>
 
-  <div class="layer-grid">
-    <div class="layer-cell">
-      <div class="layer-num">L1</div>
-      <div class="layer-label">Discover</div>
-      <div class="layer-desc">PhantomBuster LinkedIn signals &rarr; public S3 CSV</div>
+      <div class="status-strip fade-up">
+        <div class="status-item">
+          <div class="dot-live"></div>
+          L1 Live
+        </div>
+        <div class="status-item">
+          <div class="dot-live"></div>
+          L2 Live
+        </div>
+        <div class="status-item">
+          <div class="dot-live"></div>
+          L3 Live
+        </div>
+        <div class="status-item">
+          <div class="dot-pending"></div>
+          L4 Pending LinkedIn API approval
+        </div>
+      </div>
     </div>
-    <div class="layer-cell">
-      <div class="layer-num">L2</div>
-      <div class="layer-label">Extract</div>
-      <div class="layer-desc">Post-Commenter / Liker phantoms &rarr; webhook-router</div>
+  </section>
+
+  <!-- ── Section 02 — The Loop ── -->
+  <section class="section section-loop" id="the-loop">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">02 — The Loop</p>
+        <h2 class="section-title">Most operators stitch five tools together.<br>This is the one workflow.</h2>
+      </div>
+
+      <div class="loop-grid fade-up">
+        <div>
+          <ul class="problem-list">
+            <li class="problem-item">
+              <span class="problem-num">01</span>
+              <span class="problem-text">You're getting signals. You don't know which ones matter.</span>
+            </li>
+            <li class="problem-item">
+              <span class="problem-num">02</span>
+              <span class="problem-text">Someone's drafting manually. They're guessing your voice.</span>
+            </li>
+            <li class="problem-item">
+              <span class="problem-num">03</span>
+              <span class="problem-text">Approvals happen in DMs. No record. No accountability.</span>
+            </li>
+            <li class="problem-item">
+              <span class="problem-num">04</span>
+              <span class="problem-text">Publishing is whenever. No timestamp, no log.</span>
+            </li>
+            <li class="problem-item">
+              <span class="problem-num">05</span>
+              <span class="problem-text">The "audit trail" is a spreadsheet your CCO hates.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="flow-diagram">
+          <div class="flow-step">
+            <div class="flow-step-label">Step 1</div>
+            <div class="flow-step-desc">Signal detected</div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-label">Step 2</div>
+            <div class="flow-step-desc">Intent scored</div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-label">Step 3</div>
+            <div class="flow-step-desc">Draft generated in your voice</div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-label">Step 4</div>
+            <div class="flow-step-desc">Slack approval · approve / edit / skip</div>
+          </div>
+          <div class="flow-connector">↓</div>
+          <div class="flow-step">
+            <div class="flow-step-label">Step 5</div>
+            <div class="flow-step-desc">Published + logged in audit ledger</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="layer-cell">
-      <div class="layer-num">L3</div>
-      <div class="layer-label">Score + Route</div>
-      <div class="layer-desc">Claude intent &rarr; Slack approval &rarr; CRM upsert</div>
+  </section>
+
+  <!-- ── Section 03 — Pricing ── -->
+  <section class="section section-pricing" id="pricing">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">03 — Pricing</p>
+        <h2 class="section-title">Three ways in.</h2>
+        <p class="section-intro">The approval loop and the ledger are in every tier. That's the product, not a premium feature.</p>
+      </div>
+
+      <div class="pricing-grid fade-up">
+        <div class="pricing-card">
+          <div class="pricing-eyebrow">&nbsp;</div>
+          <div class="pricing-name">Solo Operator</div>
+          <div class="pricing-price">$1,200<span>/seat/mo</span></div>
+          <div class="pricing-tagline">1 operator, 1 brand voice. Full loop. For consultants, founders, and individual sales leads.</div>
+          <ul class="pricing-features">
+            <li>1 calibrated voice</li>
+            <li>Full L1–L4 pipeline</li>
+            <li>Slack approval routing</li>
+            <li>HubSpot contact upsert</li>
+            <li>Audit ledger</li>
+          </ul>
+          <a href="#request-access" class="btn btn-outline" style="width:100%; justify-content:center;">Get Early Access</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-eyebrow">Most common for agencies</div>
+          <div class="pricing-name">Studio</div>
+          <div class="pricing-price">$3,000<span>/studio/mo</span></div>
+          <div class="pricing-tagline">Up to 5 operator voices. Per-operator Slack routing. Shared ICP configuration.</div>
+          <ul class="pricing-features">
+            <li>5 calibrated voices</li>
+            <li>Per-operator Slack routing</li>
+            <li>Studio roll-up ledger</li>
+            <li>Quarterly calibration review</li>
+            <li>HubSpot upsert + deal sync</li>
+          </ul>
+          <a href="#request-access" class="btn btn-primary" style="width:100%; justify-content:center;">Get Early Access</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-eyebrow">&nbsp;</div>
+          <div class="pricing-name">Agency</div>
+          <div class="pricing-price">$6,000<span>+/mo</span></div>
+          <div class="pricing-tagline">Unlimited voices. Multi-tenant. White-label. Bring your own CRM stack.</div>
+          <ul class="pricing-features">
+            <li>Unlimited operator voices</li>
+            <li>White-label deployment</li>
+            <li>Affinity / DealCloud / HubSpot API</li>
+            <li>SOC 2 documentation pack</li>
+            <li>Dedicated calibrator</li>
+          </ul>
+          <a href="#request-access" class="btn btn-outline" style="width:100%; justify-content:center;">Contact Us</a>
+        </div>
+      </div>
     </div>
-    <div class="layer-cell">
-      <div class="layer-num">L4</div>
-      <div class="layer-label">Execute</div>
-      <div class="layer-desc">Gateway &rarr; CMAPI / PhantomBuster &middot; HMAC ledger</div>
+  </section>
+
+  <!-- ── Section 04 — In Production ── -->
+  <section class="section section-production" id="in-production">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">04 — In Production</p>
+        <h2 class="section-title">We dogfood it. On five brands.</h2>
+      </div>
+
+      <div class="quote-card fade-up">
+        <p class="quote-text">
+          "Studio B runs Amplify on five brands today. 35 of 50 PhantomBuster slots running
+          continuously. Claude drafts, we approve in Slack, every action writes to the ledger.
+          The system hasn't been a thought experiment — it's been the thing."
+        </p>
+        <div class="quote-sig-name">Kevin Bibelhausen</div>
+        <div class="quote-sig-role">Founder, Studio B</div>
+      </div>
+
+      <div class="production-brands fade-up">
+        <strong>5 brands</strong> · Studio B · Wasala · Ästhetik · Weathervane Hill · Personal
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="layer-status-bar">
-    <div class="ls-item"><span style="color:#0A6E3F">&#9679;</span>&nbsp;<span class="ls-live">L1 Live</span></div>
-    <div class="ls-item"><span style="color:#0A6E3F">&#9679;</span>&nbsp;<span class="ls-live">L2 Live</span></div>
-    <div class="ls-item"><span style="color:#0A6E3F">&#9679;</span>&nbsp;<span class="ls-live">L3 Live</span></div>
-    <div class="ls-item"><span style="color:var(--ink-dim)">&#9671;</span>&nbsp;<span class="ls-pending">L4 Pending LI approval</span></div>
-  </div>
-</section>
+  <!-- ── Section 05 — Request Access ── -->
+  <section class="section section-access" id="request-access">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">Request access</p>
+        <h2 class="section-title">Join the waitlist.</h2>
+        <p class="section-intro" style="margin-bottom: 2.5rem;">Private beta for agencies and operators. We'll get back within 48 hours.</p>
+      </div>
 
-<div class="section-rule"><hr></div>
+      <div class="access-grid fade-up">
+        <div>
+          <div class="form-wrap">
+            <div id="waitlist-form"></div>
+          </div>
+        </div>
 
-<!-- ── Section 02 — The Moat ── -->
-<section class="section fade-in" id="moat">
-  <div class="section-eyebrow">02 &mdash; The Moat</div>
-  <div class="section-title">Five tools. One approval. No audit trail.</div>
-  <p class="section-intro">Most operators run PhantomBuster for signals, a separate scoring spreadsheet, another tool for drafting, a third for publishing, and a Slack DM to &ldquo;approve.&rdquo; Every handoff leaks context. Every manual step breaks the chain. Amplify closes the loop.</p>
-
-  <div class="moat-grid">
-    <div>
-      <ol class="problem-list">
-        <li>You&rsquo;re getting signals. You don&rsquo;t know which ones matter.</li>
-        <li>Someone&rsquo;s drafting manually. They&rsquo;re guessing your voice.</li>
-        <li>Approvals happen in DMs. There&rsquo;s no record.</li>
-        <li>Publish happens whenever. There&rsquo;s no timestamp.</li>
-        <li>The ledger is a spreadsheet. Your compliance team hates it.</li>
-      </ol>
+        <div>
+          <div class="timeline-card">
+            <div class="timeline-title">What happens next</div>
+            <ul class="timeline-steps">
+              <li class="timeline-step">
+                <div class="timeline-bullet">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="timeline-week">Week 1</span>
+                  <div class="timeline-step-label">Voice calibration</div>
+                  <div class="timeline-step-detail">We listen to your existing content and calibrate your voice model.</div>
+                </div>
+              </li>
+              <li class="timeline-step">
+                <div class="timeline-bullet">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="timeline-week">Week 1</span>
+                  <div class="timeline-step-label">First signals running</div>
+                  <div class="timeline-step-detail">L1 and L2 phantoms configured and running against your ICP.</div>
+                </div>
+              </li>
+              <li class="timeline-step">
+                <div class="timeline-bullet">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="timeline-week">Week 2</span>
+                  <div class="timeline-step-label">First draft in your Slack channel</div>
+                  <div class="timeline-step-detail">L3 scoring live. Your first approval request arrives in Slack.</div>
+                </div>
+              </li>
+              <li class="timeline-step">
+                <div class="timeline-bullet">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="timeline-week">Week 2</span>
+                  <div class="timeline-step-label">First publish (earliest)</div>
+                  <div class="timeline-step-detail">You approve. It publishes. The ledger records it.</div>
+                </div>
+              </li>
+              <li class="timeline-step">
+                <div class="timeline-bullet">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="timeline-week">Day 1</span>
+                  <div class="timeline-step-label">Ledger running from the start</div>
+                  <div class="timeline-step-detail">Every action logged from day one. Audit trail begins before the first publish.</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <ul class="solution-list">
-        <li class="solution-item">
-          <div class="sol-label">L1 + L3 solve #1</div>
-          <div class="sol-body">ICP scoring runs every signal through your defined criteria. Below the cutoff, it doesn&rsquo;t reach you.</div>
-        </li>
-        <li class="solution-item">
-          <div class="sol-label">L3 solves #2</div>
-          <div class="sol-body">Claude calibrates against your approved drafts. Your voice, not a template.</div>
-        </li>
-        <li class="solution-item">
-          <div class="sol-label">L3 + ledger solve #3 + #5</div>
-          <div class="sol-body">Every Slack approval is a ledger entry: approver, timestamp, channel, response time. Exportable CSV + JSON.</div>
-        </li>
-        <li class="solution-item">
-          <div class="sol-label">L4 solves #4</div>
-          <div class="sol-body">Publish triggers only on approval. Timestamp and LinkedIn IDs write to the ledger on execution.</div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
+  </section>
 
-<div class="section-rule"><hr></div>
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <p class="footer-copy">
+      © 2026 Studio B. Amplify is a Studio B product. LinkedIn, HubSpot,
+      PhantomBuster, and Slack are trademarks of their respective owners.
+    </p>
+    <ul class="footer-links">
+      <li><a href="#">Amplify</a></li>
+      <li><a href="https://b.studio">Studio B</a></li>
+      <li><a href="https://bolt.b.studio">Bolt</a></li>
+      <li><a href="https://acuops.com">AcuOps</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+  </footer>
 
-<!-- ── Section 03 — Pricing ── -->
-<section class="section fade-in" id="pricing">
-  <div class="section-eyebrow">03 &mdash; Pricing</div>
-  <div class="section-title">Three ways in.</div>
-  <p class="section-intro">Priced per operator team, not per post. The approval loop and the ledger are in every tier &mdash; that&rsquo;s not a premium feature, it&rsquo;s the product.</p>
-
-  <div class="tiers">
-    <!-- Tier 01 -->
-    <div class="tier">
-      <div class="tier-eyebrow">Tier 01</div>
-      <div class="tier-name">Solo Operator</div>
-      <div class="tier-price">$1,200<span class="unit"> / seat / mo</span></div>
-      <div class="tier-audience">Single operator, 1 brand voice. Full loop: signals &rarr; score &rarr; draft &rarr; Slack approve &rarr; publish &rarr; ledger. For consultants, founders, sales leads running their own LinkedIn presence.</div>
-      <ul class="tier-features">
-        <li>1 calibrated voice &middot; full L1&ndash;L4 pipeline</li>
-        <li>Slack approval channel</li>
-        <li>HubSpot upsert</li>
-        <li>Audit ledger (CSV + JSON)</li>
-      </ul>
-      <div class="tier-note">Annual billed &middot; 30-day pause allowed.</div>
-    </div>
-
-    <!-- Tier 02 — featured -->
-    <div class="tier featured">
-      <div class="tier-eyebrow">Tier 02 &middot; Most common for agencies</div>
-      <div class="tier-name">Studio</div>
-      <div class="tier-price">$3,000<span class="unit"> / studio / mo</span></div>
-      <div class="tier-audience">Up to 5 operator voices, shared ICP config. Per-operator Slack routing. For boutique agencies managing multiple clients&rsquo; LinkedIn presence.</div>
-      <ul class="tier-features">
-        <li>Up to 5 voices</li>
-        <li>Per-operator Slack routing</li>
-        <li>Shared ICP config</li>
-        <li>Per-operator ledger + studio roll-up</li>
-        <li>Quarterly calibration review</li>
-      </ul>
-      <div class="tier-note">Most agencies land here.</div>
-    </div>
-
-    <!-- Tier 03 -->
-    <div class="tier">
-      <div class="tier-eyebrow">Tier 03</div>
-      <div class="tier-name">Agency</div>
-      <div class="tier-price">$6,000<span class="unit">+ / mo</span></div>
-      <div class="tier-audience">Unlimited voices, multi-tenant, white-label option, custom CRM stack. For full-service agencies. Bring your own CRM (HubSpot, Affinity, DealCloud).</div>
-      <ul class="tier-features">
-        <li>Unlimited voices</li>
-        <li>White-label option</li>
-        <li>Multi-tenant tenancy</li>
-        <li>SOC 2 Type I pack</li>
-        <li>Direct API (HubSpot / Affinity / DealCloud)</li>
-        <li>Dedicated calibrator</li>
-      </ul>
-      <div class="tier-note">Custom. Start with a conversation.</div>
-    </div>
-  </div>
-</section>
-
-<div class="section-rule"><hr></div>
-
-<!-- ── Section 04 — In Production ── -->
-<section class="section fade-in" id="in-production">
-  <div class="section-eyebrow">04 &mdash; In Production</div>
-  <div class="section-title">We dogfood it. On five brands.</div>
-
-  <div class="founder-card">
-    <p class="founder-quote">&ldquo;Studio B runs Amplify on five brands &mdash; Studio B, Wasala, &Auml;sthetik, Weathervane Hill, and Kevin&rsquo;s personal account. 35 of 50 PhantomBuster slots running continuously. Dogfood isn&rsquo;t a feature list. It&rsquo;s the moat.&rdquo;</p>
-    <div class="founder-body">Studio B runs every layer of the stack on real audiences, real signals, and real Slack approval loops. When L4 ships, we&rsquo;re first in the queue.</div>
-  </div>
-
-  <div class="stats-row" aria-label="Live stats">
-    <span>5 brands</span>
-    <span class="stats-sep">&middot;</span>
-    <span>35 active slots</span>
-    <span class="stats-sep">&middot;</span>
-    <span>Layers 1&ndash;3 live</span>
-    <span class="stats-sep">&middot;</span>
-    <span>Layer 4 pending LI approval</span>
-  </div>
-
-  <div class="founder-sig">
-    <span class="sig-name">Kevin Bibelhausen</span>
-    <span class="sig-role">&middot; Founder, Studio B</span>
-  </div>
-</section>
-
-<div class="section-rule"><hr></div>
-
-<!-- ── Request Access ── -->
-<section class="section fade-in" id="waitlist">
-  <div class="section-eyebrow">Request access</div>
-  <div class="section-title">Join the waitlist.</div>
-  <p class="section-intro">Private beta for agencies and operators. We&rsquo;ll get back within 48 hours.</p>
-
-  <div class="cta-grid">
-    <div class="cta-form">
-      <div id="waitlist-form"></div>
-      <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
-      <script>
-        hbspt.forms.create({
-          region: "na1",
-          portalId: "49070660",
-          formId: "ea2c2f4a-4e71-4dd5-8747-814c87634f5c",
-          target: "#waitlist-form",
-          css: "",
-          cssClass: "hs-form-amplify"
-        });
-      </script>
-    </div>
-
-    <aside class="cta-onboard" aria-label="Onboarding timeline">
-      <h3>What you&rsquo;ll get</h3>
-      <p>From waitlist to first published draft. No surprises.</p>
-      <ul class="onboard-list">
-        <li><span class="ob-label">Week 1</span><span class="ob-value">Voice calibration</span></li>
-        <li><span class="ob-label">Week 1</span><span class="ob-value">First signals</span></li>
-        <li><span class="ob-label">Week 2</span><span class="ob-value">First draft in your Slack</span></li>
-        <li><span class="ob-label">Week 2, earliest</span><span class="ob-value">First publish</span></li>
-        <li><span class="ob-label">Day 1</span><span class="ob-value">Ledger running</span></li>
-      </ul>
-    </aside>
-  </div>
-</section>
-
-<!-- ── Footer ── -->
-<footer>
-  <div class="f-copy">
-    &copy; 2026 Studio B. Amplify is a Studio B product. Third-party trademarks (LinkedIn, HubSpot, PhantomBuster, Slack) are the property of their respective owners.
-  </div>
-  <div class="f-links">
-    <a href="https://amplify.b.studio">Amplify Platform</a>
-    <a href="https://b.studio">Studio B</a>
-    <a href="https://bolt.b.studio">Bolt</a>
-    <a href="https://acuops.com">AcuOps</a>
-    <a href="https://b.studio/privacy">Privacy</a>
-  </div>
-</footer>
-
-<!-- ── Scroll Fade-In ── -->
-<script>
-(function() {
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
+  <script>
+    // HubSpot form
+    hbspt.forms.create({
+      region: "na1",
+      portalId: "49070660",
+      formId: "ea2c2f4a-4e71-4dd5-8747-814c87634f5c",
+      target: "#waitlist-form",
+      cssClass: "hs-form-amplify"
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
-  document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
-})();
-</script>
+
+    // Scroll animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>
