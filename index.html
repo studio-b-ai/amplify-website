@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amplify by Studio B — LinkedIn Intelligence for Agencies</title>
-  <meta name="description" content="Signal to publish in one loop. Amplify scores LinkedIn intent, drafts in your voice, and waits for your Slack approval before anything posts. In production on 5 brands.">
+  <title>Amplify by Studio B — The LinkedIn intelligence loop agencies actually ship</title>
+  <meta name="description" content="Signal to publish in one loop. Amplify scores LinkedIn intent, drafts in your calibrated voice, and waits for a Slack approval before anything publishes. Every action on the HMAC audit ledger.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&family=Newsreader:ital,wght@1,400;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
 
   <style>
@@ -30,6 +30,16 @@
 
       --border:       #E8E4F5;
       --border-mid:   #D4CCF0;
+
+      /* Amplify mark identity — forest fill + oxblood stroke per design system. */
+      --mark-fill:    #1F3B2E;
+      --mark-stroke:  #6B1824;
+
+      /* Dark-anchor text helpers */
+      --on-dark:      rgba(255,255,255,0.92);
+      --on-dark-60:   rgba(255,255,255,0.60);
+      --on-dark-40:   rgba(255,255,255,0.40);
+      --on-dark-border: rgba(255,255,255,0.14);
     }
 
     *, *::before, *::after {
@@ -38,9 +48,7 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -48,6 +56,30 @@
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; }
+
+    /* ── Disclosure strip ── */
+    .disclosure-strip {
+      background: var(--ink);
+      color: var(--on-dark);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.55rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid var(--violet-15);
+    }
+    .disclosure-strip .sep {
+      color: var(--violet);
+      padding: 0 0.6rem;
+    }
+    .disclosure-strip sup a {
+      color: var(--violet);
+      text-decoration: none;
     }
 
     /* ── Nav ── */
@@ -58,35 +90,27 @@
       background: var(--white);
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
-      height: 60px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 2rem;
     }
-
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
       text-decoration: none;
       flex-shrink: 0;
     }
-
-    .nav-brand-mark {
-      width: 26px;
-      height: 26px;
-      flex-shrink: 0;
-    }
-
+    .nav-brand-mark { width: 30px; height: 30px; flex-shrink: 0; }
     .nav-brand-name {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
       font-weight: 800;
-      font-size: 1.05rem;
-      letter-spacing: -0.01em;
+      font-size: 1.1rem;
+      letter-spacing: -0.012em;
       color: var(--ink);
     }
-
     .nav-brand-sub {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.55rem;
@@ -95,26 +119,21 @@
       text-transform: uppercase;
       margin-top: 1px;
     }
-
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 2rem;
+      gap: 1.75rem;
       list-style: none;
     }
-
     .nav-links a {
       font-family: 'Inter', sans-serif;
       font-weight: 500;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       color: var(--ink-60);
       text-decoration: none;
       transition: color 0.2s;
     }
-
-    .nav-links a:hover {
-      color: var(--ink);
-    }
+    .nav-links a:hover { color: var(--ink); }
 
     .btn {
       display: inline-flex;
@@ -131,35 +150,51 @@
       border: 1.5px solid transparent;
       white-space: nowrap;
     }
+    .btn-primary { background: var(--violet); color: var(--white); border-color: var(--violet); }
+    .btn-primary:hover { background: var(--violet-dark); border-color: var(--violet-dark); }
+    .btn-outline { background: transparent; color: var(--ink); border-color: var(--border-mid); }
+    .btn-outline:hover { border-color: var(--violet); color: var(--violet); }
+    .btn-on-dark { background: var(--violet); color: var(--white); border-color: var(--violet); }
+    .btn-on-dark:hover { background: var(--white); color: var(--ink); border-color: var(--white); }
 
-    .btn-primary {
-      background: var(--violet);
-      color: var(--white);
-      border-color: var(--violet);
-    }
+    /* ── Sections general ── */
+    .section { padding: 5.5rem 2rem; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
 
-    .btn-primary:hover {
-      background: var(--violet-dark);
-      border-color: var(--violet-dark);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--ink);
-      border-color: var(--border-mid);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--violet);
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
       color: var(--violet);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.85rem, 3.2vw, 2.7rem);
+      letter-spacing: -0.02em;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .section-intro {
+      font-size: 1.05rem;
+      color: var(--ink-60);
+      line-height: 1.65;
+      max-width: 62ch;
+      margin-bottom: 3rem;
     }
 
-    /* ── Hero ── */
-    .hero {
-      background: var(--white);
-      padding: 6rem 2rem 5rem;
-    }
+    .dark .section-title,
+    .dark .section-label { color: var(--white); }
+    .dark .section-label { color: var(--violet); }
+    .dark .section-intro { color: var(--on-dark-60); }
+    .dark { background: var(--violet-deep); color: var(--on-dark); }
 
+    /* ── §A Hero ── */
+    .hero { background: var(--white); padding: 5.5rem 2rem 4.5rem; }
     .hero-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -168,106 +203,75 @@
       gap: 4rem;
       align-items: center;
     }
-
     .hero-eyebrow {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.68rem;
       font-weight: 500;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--violet);
       margin-bottom: 1.5rem;
     }
-
     .hero-headline {
-      font-family: 'Inter', sans-serif;
-      font-weight: 900;
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      letter-spacing: -0.035em;
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.6rem, 5.6vw, 4.6rem);
+      letter-spacing: -0.028em;
       line-height: 1.02;
       color: var(--ink);
       margin-bottom: 1.5rem;
     }
-
     .hero-headline .underline-keyword {
       position: relative;
       display: inline;
     }
-
     .hero-headline .underline-keyword::after {
       content: '';
       position: absolute;
       left: 0;
-      bottom: -0.1em;
+      bottom: -0.08em;
       width: 100%;
       height: 4px;
       background: var(--violet);
     }
-
     .hero-sub {
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       font-weight: 400;
       color: var(--ink-60);
       line-height: 1.65;
-      max-width: 52ch;
+      max-width: 54ch;
       margin-bottom: 2rem;
     }
-
     .hero-cta-row {
       display: flex;
       align-items: center;
       gap: 1rem;
       margin-bottom: 1.25rem;
     }
+    .hero-cta-row .btn { font-size: 1rem; padding: 0.75rem 1.5rem; }
 
-    .hero-cta-row .btn {
-      font-size: 1rem;
-      padding: 0.75rem 1.5rem;
-    }
-
-
-    /* ── Approval Card ── */
+    /* approval card */
     .approval-card {
       background: var(--white);
       border: 1px solid var(--border);
       box-shadow: 0 4px 24px rgba(124,58,237,0.10);
     }
-
     .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0.875rem 1.125rem;
       border-bottom: 1px solid var(--border);
     }
-
     .card-header-left {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      display: flex; align-items: center; gap: 0.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--ink-60);
     }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--violet);
-      flex-shrink: 0;
-    }
-
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--violet); flex-shrink: 0; }
     .card-number {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: var(--ink-40);
+      font-size: 0.6rem; letter-spacing: 0.08em; color: var(--ink-40);
     }
-
     .card-meta {
       padding: 0.875rem 1.125rem;
       border-bottom: 1px solid var(--border);
@@ -276,440 +280,413 @@
       gap: 0.3rem 1rem;
       align-items: center;
     }
-
     .meta-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink-40);
-      white-space: nowrap;
+      font-size: 0.6rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-40); white-space: nowrap;
     }
-
-    .meta-value {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      color: var(--ink-60);
-    }
-
-    .score-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .score-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--ink);
-      white-space: nowrap;
-    }
-
-    .score-bar-track {
-      flex: 1;
-      height: 6px;
-      background: var(--violet-15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .score-bar-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 87%;
-      background: var(--violet);
-    }
-
+    .meta-value { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--ink-60); }
+    .score-row { display: flex; align-items: center; gap: 0.75rem; }
+    .score-label { font-size: 0.78rem; font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .score-bar-track { flex: 1; height: 6px; background: var(--violet-15); position: relative; overflow: hidden; }
+    .score-bar-fill { position: absolute; top: 0; left: 0; height: 100%; width: 87%; background: var(--violet); }
     .card-draft {
-      padding: 1rem 1.125rem;
-      border-bottom: 1px solid var(--border);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.82rem;
-      font-style: italic;
-      color: var(--ink-60);
-      line-height: 1.6;
+      padding: 1rem 1.125rem; border-bottom: 1px solid var(--border);
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 0.95rem; font-style: italic;
+      color: var(--ink-60); line-height: 1.6;
     }
-
-    .card-actions {
-      padding: 0.875rem 1.125rem;
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
-    }
-
-    .card-actions .btn {
-      font-size: 0.78rem;
-      padding: 0.45rem 0.875rem;
-    }
-
+    .card-actions { padding: 0.875rem 1.125rem; display: flex; align-items: center; gap: 0.625rem; }
+    .card-actions .btn { font-size: 0.78rem; padding: 0.45rem 0.875rem; }
     .card-footer {
       padding: 0.5rem 1.125rem 0.75rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: var(--ink-40);
+      font-size: 0.6rem; letter-spacing: 0.08em; color: var(--ink-40);
     }
 
-
-    /* ── Sections general ── */
-    .section {
-      padding: 5rem 2rem;
-    }
-
-    .section-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--violet);
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: 'Inter', sans-serif;
-      font-weight: 800;
-      font-size: clamp(1.75rem, 3vw, 2.5rem);
-      letter-spacing: -0.025em;
-      color: var(--ink);
-      margin-bottom: 1rem;
-    }
-
-    .section-intro {
-      font-size: 1.05rem;
-      color: var(--ink-60);
-      line-height: 1.65;
-      max-width: 60ch;
-      margin-bottom: 3rem;
-    }
-
-    /* ── Section 01 — How It Works ── */
-    .section-how {
-      background: var(--white);
-    }
-
+    /* ── §B How It Works ── */
+    .section-how { background: var(--white); }
     .layers-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 2px;
       margin-bottom: 2rem;
     }
-
-    .layer-cell {
-      background: var(--ground);
-      padding: 2rem 1.5rem;
-    }
-
+    .layer-cell { background: var(--ground); padding: 2rem 1.5rem; }
     .layer-number {
-      font-family: 'Inter', sans-serif;
-      font-weight: 900;
-      font-size: 3rem;
-      line-height: 1;
-      margin-bottom: 0.75rem;
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 800; font-size: 3rem; line-height: 1; margin-bottom: 0.75rem;
     }
-
-    .layer-number span {
-      color: var(--violet);
-      opacity: 0.3;
-    }
-
-    .layer-name {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-    }
-
-    .layer-desc {
-      font-size: 0.85rem;
-      color: var(--ink-60);
-      line-height: 1.6;
-    }
-
+    .layer-number span { color: var(--violet); opacity: 0.3; }
+    .layer-name { font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 0.5rem; }
+    .layer-desc { font-size: 0.85rem; color: var(--ink-60); line-height: 1.6; }
     .status-strip {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
+      font-size: 0.65rem; letter-spacing: 0.1em;
       color: var(--ink-40);
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
+      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
     }
+    .status-item { display: flex; align-items: center; gap: 0.4rem; }
+    .dot-live { width: 7px; height: 7px; border-radius: 50%; background: #10B981; flex-shrink: 0; }
+    .dot-pending { width: 7px; height: 7px; border-radius: 50%; background: var(--border-mid); flex-shrink: 0; }
 
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+    /* ── §C Audit ledger (DARK) ── */
+    .section-ledger .section-title { color: var(--white); }
+    .section-ledger .section-label { color: var(--violet); }
+    .section-ledger .section-intro { color: var(--on-dark-60); }
+    .ledger-frame {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--on-dark-border);
+      border-left: 3px solid var(--violet);
+      padding: 1.25rem 1.5rem;
     }
-
-    .dot-live {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #10B981;
-      flex-shrink: 0;
-    }
-
-    .dot-pending {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--border-mid);
-      flex-shrink: 0;
-    }
-
-    /* ── Section 02 — The Loop ── */
-    .section-loop {
-      background: var(--surface);
-    }
-
-    .loop-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .problem-list {
-      list-style: none;
-    }
-
-    .problem-item {
-      display: flex;
-      gap: 1rem;
-      padding: 1.25rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .problem-item:first-child {
-      border-top: 1px solid var(--border);
-    }
-
-    .problem-num {
+    .ledger-frame-head {
+      display: flex; align-items: center; justify-content: space-between;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--violet);
-      flex-shrink: 0;
-      margin-top: 0.15rem;
+      font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--on-dark-60);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--on-dark-border);
     }
-
-    .problem-text {
-      font-size: 0.925rem;
-      font-weight: 500;
-      color: var(--ink);
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--on-dark);
       line-height: 1.5;
     }
-
-    .flow-diagram {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+    .ledger-table thead th {
+      text-align: left;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-size: 0.56rem;
+      color: var(--on-dark-40);
+      padding: 0.4rem 0.75rem 0.4rem 0;
+      border-bottom: 1px solid var(--on-dark-border);
     }
-
-    .flow-step {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--violet);
-      padding: 0.875rem 1.125rem;
+    .ledger-table tbody td {
+      padding: 0.45rem 0.75rem 0.45rem 0;
+      border-bottom: 1px dashed var(--on-dark-border);
+      vertical-align: top;
+      white-space: nowrap;
     }
-
-    .flow-step + .flow-step {
-      margin-top: -1px;
+    .ledger-table tbody tr:last-child td { border-bottom: none; }
+    .ledger-redacted {
+      display: inline-block;
+      background: var(--on-dark-40);
+      color: var(--on-dark-40);
+      padding: 0 0.2rem;
+      letter-spacing: 0.02em;
     }
-
-    .flow-connector {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding-left: 1.5rem;
-      height: 28px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+    .ledger-hash {
       color: var(--violet);
+      cursor: help;
+    }
+    .ledger-chain-head {
+      margin-top: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--on-dark-border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--on-dark-40);
+      flex-wrap: wrap; gap: 0.75rem;
+    }
+    .ledger-chain-head .hash-value {
+      color: var(--violet);
+      text-transform: none;
+      letter-spacing: 0.02em;
+      font-size: 0.68rem;
+    }
+    .ledger-sample-flag {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 0.1rem 0.45rem;
+      border: 1px solid var(--violet);
+      color: var(--violet);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
-    .flow-step-label {
+    /* ── §D Schedule of Fees ── */
+    .section-fees { background: var(--white); }
+    .fees-table-wrap {
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .fees-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+    .fees-table thead th {
+      text-align: left;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.58rem;
-      font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--violet);
-      margin-bottom: 0.25rem;
-    }
-
-    .flow-step-desc {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--ink);
-    }
-
-    /* ── Section 03 — Pricing ── */
-    .section-pricing {
-      background: var(--white);
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5px;
-    }
-
-    .pricing-card {
-      background: var(--ground);
-      padding: 2rem;
-    }
-
-    .pricing-card.featured {
-      background: var(--surface);
-      border: 1.5px solid var(--violet-15);
-      border-top: 3px solid var(--violet);
-      margin: -1.5px;
-      z-index: 1;
-      position: relative;
-    }
-
-    .pricing-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--violet);
-      margin-bottom: 0.75rem;
-      min-height: 1rem;
-    }
-
-    .pricing-name {
-      font-family: 'Inter', sans-serif;
-      font-weight: 800;
-      font-size: 1.2rem;
-      color: var(--ink);
-      margin-bottom: 0.25rem;
-    }
-
-    .pricing-price {
-      font-family: 'Inter', sans-serif;
-      font-weight: 900;
-      font-size: 2rem;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-      margin-bottom: 0.25rem;
-    }
-
-    .pricing-price span {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--ink-40);
-      letter-spacing: 0;
-    }
-
-    .pricing-tagline {
-      font-size: 0.85rem;
+      font-weight: 600;
       color: var(--ink-60);
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
     }
-
-    .pricing-features {
-      list-style: none;
-      margin-bottom: 2rem;
+    .fees-table tbody td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
     }
-
-    .pricing-features li {
-      font-size: 0.85rem;
-      color: var(--ink-60);
-      padding: 0.35rem 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .pricing-features li::before {
-      content: '·';
-      color: var(--violet);
+    .fees-table tbody tr:last-child td { border-bottom: none; }
+    .fees-tier {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
       font-weight: 700;
-      flex-shrink: 0;
+      font-size: 1rem;
+    }
+    .fees-price {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .fees-price span { font-size: 0.78rem; font-weight: 500; color: var(--ink-40); letter-spacing: 0; margin-left: 0.2rem; }
+    .fees-footnote {
+      margin-top: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-40);
     }
 
-    /* ── Section 04 — In Production ── */
-    .section-production {
-      background: var(--violet-deep);
-    }
-
-    .section-production .section-label {
-      color: var(--violet);
-    }
-
-    .section-production .section-title {
-      color: var(--white);
-    }
-
-    .quote-card {
-      background: var(--white);
-      border-left: 3px solid var(--violet);
-      padding: 2rem 2.5rem;
+    /* ── §E Compliance (DARK) ── */
+    .section-compliance .section-title { color: var(--white); }
+    .section-compliance .section-label { color: var(--violet); }
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
+    .exhibit-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--on-dark-border);
+      padding: 1.75rem 1.75rem 1.5rem;
+    }
+    .exhibit-card-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.5rem;
+    }
+    .exhibit-card-title {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .exhibit-card-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      color: var(--on-dark);
+      line-height: 1.65;
+    }
+    .exhibit-card-body strong { color: var(--white); }
+    .exhibit-card-body p + p { margin-top: 0.75rem; }
 
-    .quote-text {
-      font-size: 1.05rem;
+    /* E.3 Agency multi-brand mock */
+    .agency-mock {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--on-dark-border);
+      padding: 0;
+      margin-top: 1rem;
+    }
+    .agency-mock-head {
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--on-dark-border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+    }
+    .agency-mock-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--violet);
+    }
+    .agency-mock-search {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--on-dark-60);
+      padding: 0.4rem 0.75rem;
+      border: 1px dashed var(--on-dark-border);
+      background: transparent;
+      min-width: 280px;
+    }
+    .agency-mock-search::before { content: '⌕  '; color: var(--violet); }
+    .agency-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+    }
+    .agency-grid .agency-cell {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--on-dark-border);
+      border-right: 1px solid var(--on-dark-border);
+      color: var(--on-dark);
+    }
+    .agency-grid .agency-cell:nth-child(5n) { border-right: none; }
+    .agency-grid .agency-header { color: var(--on-dark-40); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .agency-brand { color: var(--violet); font-weight: 600; }
+    .agency-status-dot {
+      display: inline-block; width: 8px; height: 8px; margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    .agency-status-dot.green { background: var(--mark-fill); }
+    .agency-status-dot.amber { background: var(--mark-stroke); }
+
+    /* ── §F Receipts ── */
+    .section-receipts { background: var(--white); }
+    .receipts-body {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 400;
       font-style: italic;
-      color: var(--ink-60);
-      line-height: 1.7;
+      font-size: 1.35rem;
+      line-height: 1.55;
+      color: var(--ink);
+      max-width: 58ch;
+      margin-bottom: 2.5rem;
+    }
+    .receipts-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .receipt-cell {
+      background: var(--ground);
+      padding: 1.75rem 1.5rem;
+    }
+    .receipt-cell-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.75rem;
+    }
+    .receipt-cell-line {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    /* ── Voice A/B placeholder (§ sec-voice-ab — filled in PR C) ── */
+    .section-voice-ab-placeholder {
+      background: var(--surface-alt);
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .voice-ab-placeholder-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-40);
+    }
+    .voice-ab-placeholder-inner strong { color: var(--violet); font-weight: 600; }
+
+    /* ── Schedule of Exhibits ── */
+    .section-exhibits { background: var(--white); padding: 3.5rem 2rem; }
+    .exhibits-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-40);
       margin-bottom: 1.25rem;
     }
-
-    .quote-sig-name {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
+    .exhibits-list {
+      list-style: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
       color: var(--ink);
     }
-
-    .quote-sig-role {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    .exhibits-list li {
+      display: flex; align-items: baseline;
+      padding: 0.45rem 0;
+      gap: 0.5rem;
+    }
+    .exhibits-list li a {
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .exhibits-list li a:hover { color: var(--violet); }
+    .exhibits-list .lead { flex-shrink: 0; }
+    .exhibits-list .dots {
+      flex: 1;
+      border-bottom: 1px dotted var(--ink-40);
+      transform: translateY(-4px);
+      margin: 0 0.4rem;
+    }
+    .exhibits-list .page {
+      flex-shrink: 0;
       color: var(--ink-40);
-      margin-top: 0.2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-
-    /* ── Section 05 — Request Access ── */
-    .section-access {
-      background: var(--white);
+    /* ── Footnotes ── */
+    .section-footnotes { background: var(--surface-alt); padding: 3rem 2rem; }
+    .footnotes-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-40);
+      margin-bottom: 1rem;
+    }
+    .footnotes-list {
+      list-style: none;
+      counter-reset: fn;
+      font-size: 0.85rem;
+      color: var(--ink-60);
+      line-height: 1.7;
+      max-width: 80ch;
+    }
+    .footnotes-list li {
+      counter-increment: fn;
+      padding: 0.35rem 0;
+      position: relative;
+      padding-left: 1.75rem;
+    }
+    .footnotes-list li::before {
+      content: counter(fn);
+      position: absolute;
+      left: 0;
+      top: 0.35rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--violet);
     }
 
+    /* ── Request access ── */
+    .section-access { background: var(--white); }
     .access-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
       align-items: start;
     }
-
     .form-wrap {
       background: var(--ground);
       padding: 2rem;
       border: 1px solid var(--border);
     }
-
-    /* HubSpot form overrides */
     .hs-form-amplify .hs-input {
       width: 100% !important;
       font-family: 'Inter', sans-serif !important;
@@ -719,14 +696,9 @@
       border-radius: 0 !important;
       background: var(--white) !important;
       color: var(--ink) !important;
-      transition: border-color 0.2s !important;
       outline: none !important;
     }
-
-    .hs-form-amplify .hs-input:focus {
-      border-color: var(--violet) !important;
-    }
-
+    .hs-form-amplify .hs-input:focus { border-color: var(--violet) !important; }
     .hs-form-amplify .hs-button {
       font-family: 'Inter', sans-serif !important;
       font-weight: 700 !important;
@@ -737,213 +709,118 @@
       border-radius: 0 !important;
       padding: 0.75rem 1.5rem !important;
       cursor: pointer !important;
-      transition: background 0.2s !important;
     }
-
-    .hs-form-amplify .hs-button:hover {
-      background: var(--violet-dark) !important;
-    }
-
+    .hs-form-amplify .hs-button:hover { background: var(--violet-dark) !important; }
     .hs-form-amplify label {
       font-family: 'Inter', sans-serif !important;
       font-size: 0.8rem !important;
       font-weight: 500 !important;
       color: var(--ink) !important;
     }
+    .hs-form-amplify .hs-field-desc { font-size: 0.75rem !important; color: var(--ink-40) !important; }
+    .hs-form-amplify .hs-error-msgs { font-size: 0.75rem !important; color: #DC2626 !important; list-style: none !important; }
 
-    .hs-form-amplify .hs-field-desc {
-      font-size: 0.75rem !important;
-      color: var(--ink-40) !important;
-    }
-
-    .hs-form-amplify .hs-error-msgs {
-      font-size: 0.75rem !important;
-      color: #DC2626 !important;
-      list-style: none !important;
-    }
-
-    .timeline-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 2rem;
-    }
-
-    .timeline-title {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: var(--ink);
-      margin-bottom: 1.5rem;
-    }
-
-    .timeline-steps {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .timeline-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.875rem;
-    }
-
+    .timeline-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; }
+    .timeline-title { font-weight: 700; font-size: 1.05rem; color: var(--ink); margin-bottom: 1.5rem; }
+    .timeline-steps { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; }
+    .timeline-step { display: flex; align-items: flex-start; gap: 0.875rem; }
     .timeline-bullet {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--violet);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--violet); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
       margin-top: 0.1rem;
     }
-
-    .timeline-bullet svg {
-      width: 10px;
-      height: 10px;
-    }
-
+    .timeline-bullet svg { width: 10px; height: 10px; }
     .timeline-week {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.58rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-size: 0.58rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--violet);
       display: block;
       margin-bottom: 0.2rem;
     }
-
-    .timeline-step-label {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.88rem;
-      color: var(--ink);
-      margin-bottom: 0.15rem;
-    }
-
-    .timeline-step-detail {
-      font-size: 0.8rem;
-      color: var(--ink-60);
-      line-height: 1.5;
-    }
+    .timeline-step-label { font-weight: 500; font-size: 0.88rem; color: var(--ink); margin-bottom: 0.15rem; }
+    .timeline-step-detail { font-size: 0.8rem; color: var(--ink-60); line-height: 1.5; }
 
     /* ── Footer ── */
     .footer {
       background: var(--violet-deep);
       padding: 2.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
     }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.4); line-height: 1.6; max-width: 50ch; }
+    .footer-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; flex-shrink: 0; }
+    .footer-links a { font-weight: 500; font-size: 0.8rem; color: rgba(255,255,255,0.6); text-decoration: none; }
+    .footer-links a:hover { color: var(--white); }
 
-    .footer-copy {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.4);
-      line-height: 1.6;
-      max-width: 50ch;
-    }
-
-    .footer-links {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      list-style: none;
-      flex-shrink: 0;
-    }
-
-    .footer-links a {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.6);
+    /* footnote sup links */
+    sup.fn-ref a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6em;
+      color: var(--violet);
       text-decoration: none;
-      transition: color 0.2s;
+      margin-left: 0.1em;
     }
+    .dark sup.fn-ref a { color: var(--violet); }
 
-    .footer-links a:hover {
-      color: var(--white);
-    }
-
-    /* ── Scroll animations ── */
+    /* ── Fade-in (with four fallbacks) ── */
     .fade-up {
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
+    /* Fallback 4: JS-disabled — reveal via .no-js on <html>. */
+    html.no-js .fade-up { opacity: 1; transform: none; }
+
+    /* Fallback 3: prefers-reduced-motion overrides animation. */
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { opacity: 1 !important; transform: none !important; transition: none !important; }
     }
 
     /* ── Responsive ── */
     @media (max-width: 1024px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-      }
-
-      .layers-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .pricing-card.featured {
-        margin: 0;
-      }
-
-      .loop-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .access-grid {
-        grid-template-columns: 1fr;
-      }
+      .hero-inner { grid-template-columns: 1fr; }
+      .layers-grid { grid-template-columns: repeat(2, 1fr); }
+      .compliance-grid { grid-template-columns: 1fr; }
+      .receipts-list { grid-template-columns: 1fr; }
+      .access-grid { grid-template-columns: 1fr; }
+      .agency-grid { grid-template-columns: 1.3fr 1fr 1fr; }
+      .agency-grid .agency-cell:nth-child(5n) { border-right: 1px solid var(--on-dark-border); }
+      .agency-grid .agency-cell:nth-child(3n) { border-right: none; }
     }
-
     @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-
-
-      .layers-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-      }
-
-      .footer-links {
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
+      .nav-links { display: none; }
+      .disclosure-strip { font-size: 0.55rem; padding: 0.5rem 1rem; }
+      .layers-grid { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .footer-links { flex-wrap: wrap; gap: 1rem; }
+      .voice-ab-placeholder-inner { flex-direction: column; align-items: flex-start; text-align: left; }
+      .agency-grid { grid-template-columns: 1fr; }
+      .agency-grid .agency-cell { border-right: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- ── Disclosure strip ── -->
+  <div class="disclosure-strip">
+    Amplify by Studio B
+    <span class="sep">·</span> Beta release 2026-04
+    <span class="sep">·</span> Intent → voice → action
+    <span class="sep">·</span> All activity audit-logged
+    <span class="sep">·</span> Methodology<sup class="fn-ref"><a href="#fn-1">¹</a></sup>
+  </div>
+
   <!-- ── Nav ── -->
   <nav class="nav">
-    <a href="#" class="nav-brand">
-      <svg class="nav-brand-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <a href="#" class="nav-brand" aria-label="Amplify by Studio B">
+      <svg class="nav-brand-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path fill-rule="evenodd"
           d="M 3 10 L 7 12 L 3 14 L 4.5 12 Z
              M 8.5 8 L 13.5 12 L 8.5 16 L 10.5 12 Z
              M 15 6 L 21 12 L 15 18 L 17.5 12 Z"
-          fill="#0F0A1E" stroke="#7C3AED" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+          fill="#1F3B2E" stroke="#6B1824" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
       <div>
         <div class="nav-brand-name">Amplify</div>
@@ -952,24 +829,26 @@
     </a>
 
     <ul class="nav-links">
-      <li><a href="#how-it-works">How It Works</a></li>
-      <li><a href="#the-loop">The Loop</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-
+      <li><a href="#sec-a-loop">§A The loop</a></li>
+      <li><a href="#sec-b-how">§B How it works</a></li>
+      <li><a href="#sec-c-ledger">§C Ledger</a></li>
+      <li><a href="#sec-d-fees">§D Fees</a></li>
+      <li><a href="#sec-e-compliance">§E Compliance</a></li>
+      <li><a href="#sec-f-receipts">§F Receipts</a></li>
     </ul>
 
     <a href="#request-access" class="btn btn-primary">Get Early Access</a>
   </nav>
 
-  <!-- ── Hero ── -->
-  <section class="hero">
+  <!-- ── §A Hero — The loop ── -->
+  <section class="hero" id="sec-a-loop">
     <div class="hero-inner">
       <div class="hero-left">
-        <p class="hero-eyebrow">Signal → Score → Draft → Approve → Publish</p>
+        <p class="hero-eyebrow">§A — Signal → Score → Draft → Approve → Publish</p>
 
         <h1 class="hero-headline">
           The LinkedIn<br>
-          <span class="underline-keyword">intelligence loop</span><br>
+          <span class="underline-keyword">intelligence loop</span><sup class="fn-ref"><a href="#fn-1">¹</a></sup><br>
           agencies actually ship.
         </h1>
 
@@ -981,9 +860,8 @@
 
         <div class="hero-cta-row">
           <a href="#request-access" class="btn btn-primary">Get Early Access →</a>
-          <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+          <a href="#sec-b-how" class="btn btn-outline">See how it works</a>
         </div>
-
       </div>
 
       <div class="hero-right">
@@ -1010,9 +888,7 @@
             <div class="meta-value">
               <div class="score-row">
                 <div class="score-label">8.7 / 10</div>
-                <div class="score-bar-track">
-                  <div class="score-bar-fill"></div>
-                </div>
+                <div class="score-bar-track"><div class="score-bar-fill"></div></div>
               </div>
             </div>
           </div>
@@ -1029,22 +905,22 @@
             <a href="#request-access" class="btn btn-outline">Skip</a>
           </div>
 
-          <div class="card-footer">
-            Awaiting approval · #amplify-approvals
-          </div>
+          <div class="card-footer">Awaiting approval · #amplify-approvals</div>
         </div>
       </div>
     </div>
   </section>
 
-
-  <!-- ── Section 01 — How It Works ── -->
-  <section class="section section-how" id="how-it-works">
+  <!-- ── §B How it works ── -->
+  <section class="section section-how" id="sec-b-how">
     <div class="section-inner">
       <div class="fade-up">
-        <p class="section-label">01 — How It Works</p>
+        <p class="section-label">§B — How it works</p>
         <h2 class="section-title">Four layers. One approval gate.</h2>
-        <p class="section-intro">Amplify is a pipeline, not a point tool. Each layer has one job.</p>
+        <p class="section-intro">
+          Amplify is a pipeline, not a point tool. Each layer has one job. Most
+          operators stitch five tools together. This is the one workflow.
+        </p>
       </div>
 
       <div class="layers-grid fade-up">
@@ -1071,174 +947,335 @@
       </div>
 
       <div class="status-strip fade-up">
-        <div class="status-item">
-          <div class="dot-live"></div>
-          L1 Live
-        </div>
-        <div class="status-item">
-          <div class="dot-live"></div>
-          L2 Live
-        </div>
-        <div class="status-item">
-          <div class="dot-live"></div>
-          L3 Live
-        </div>
-        <div class="status-item">
-          <div class="dot-pending"></div>
-          L4 Pending LinkedIn API approval
-        </div>
+        <div class="status-item"><div class="dot-live"></div>L1 Live</div>
+        <div class="status-item"><div class="dot-live"></div>L2 Live</div>
+        <div class="status-item"><div class="dot-live"></div>L3 Live</div>
+        <div class="status-item"><div class="dot-pending"></div>L4 Pending LinkedIn API approval</div>
       </div>
     </div>
   </section>
 
-  <!-- ── Section 02 — The Loop ── -->
-  <section class="section section-loop" id="the-loop">
-    <div class="section-inner">
-      <div class="fade-up">
-        <p class="section-label">02 — The Loop</p>
-        <h2 class="section-title">Most operators stitch five tools together.<br>This is the one workflow.</h2>
-      </div>
-
-      <div class="loop-grid fade-up">
-        <div>
-          <ul class="problem-list">
-            <li class="problem-item">
-              <span class="problem-num">01</span>
-              <span class="problem-text">You're getting signals. You don't know which ones matter.</span>
-            </li>
-            <li class="problem-item">
-              <span class="problem-num">02</span>
-              <span class="problem-text">Someone's drafting manually. They're guessing your voice.</span>
-            </li>
-            <li class="problem-item">
-              <span class="problem-num">03</span>
-              <span class="problem-text">Approvals happen in DMs. No record. No accountability.</span>
-            </li>
-            <li class="problem-item">
-              <span class="problem-num">04</span>
-              <span class="problem-text">Publishing is whenever. No timestamp, no log.</span>
-            </li>
-            <li class="problem-item">
-              <span class="problem-num">05</span>
-              <span class="problem-text">The "audit trail" is a spreadsheet your CCO hates.</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="flow-diagram">
-          <div class="flow-step">
-            <div class="flow-step-label">Step 1</div>
-            <div class="flow-step-desc">Signal detected</div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-label">Step 2</div>
-            <div class="flow-step-desc">Intent scored</div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-label">Step 3</div>
-            <div class="flow-step-desc">Draft generated in your voice</div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-label">Step 4</div>
-            <div class="flow-step-desc">Slack approval · approve / edit / skip</div>
-          </div>
-          <div class="flow-connector">↓</div>
-          <div class="flow-step">
-            <div class="flow-step-label">Step 5</div>
-            <div class="flow-step-desc">Published + logged in audit ledger</div>
-          </div>
-        </div>
-      </div>
+  <!-- ── Voice A/B placeholder (PR C) ── -->
+  <section class="section-voice-ab-placeholder" id="sec-voice-ab" aria-label="Voice calibration A/B — ships in PR C">
+    <div class="voice-ab-placeholder-inner">
+      <div>§ voice-ab &nbsp;·&nbsp; <strong>Voice calibration A/B</strong> &nbsp;·&nbsp; Generic LLM vs. Amplify-calibrated</div>
+      <div>Ships PR C</div>
     </div>
   </section>
 
-  <!-- ── Section 03 — Pricing ── -->
-  <section class="section section-pricing" id="pricing">
+  <!-- ── §C Audit ledger (DARK) ── -->
+  <section class="section dark section-ledger" id="sec-c-ledger">
     <div class="section-inner">
       <div class="fade-up">
-        <p class="section-label">03 — Pricing</p>
-        <h2 class="section-title">Three ways in.</h2>
-        <p class="section-intro">The approval loop and the ledger are in every tier. That's the product, not a premium feature.</p>
-      </div>
-
-      <div class="pricing-grid fade-up">
-        <div class="pricing-card">
-          <div class="pricing-eyebrow">&nbsp;</div>
-          <div class="pricing-name">Solo Operator</div>
-          <div class="pricing-price">$1,200<span>/seat/mo</span></div>
-          <div class="pricing-tagline">1 operator, 1 brand voice. Full loop. For consultants, founders, and individual sales leads.</div>
-          <ul class="pricing-features">
-            <li>1 calibrated voice</li>
-            <li>Full L1–L4 pipeline</li>
-            <li>Slack approval routing</li>
-            <li>HubSpot contact upsert</li>
-            <li>Audit ledger</li>
-          </ul>
-          <a href="#request-access" class="btn btn-outline" style="width:100%; justify-content:center;">Get Early Access</a>
-        </div>
-
-        <div class="pricing-card featured">
-          <div class="pricing-eyebrow">Most common for agencies</div>
-          <div class="pricing-name">Studio</div>
-          <div class="pricing-price">$3,000<span>/studio/mo</span></div>
-          <div class="pricing-tagline">Up to 5 operator voices. Per-operator Slack routing. Shared ICP configuration.</div>
-          <ul class="pricing-features">
-            <li>5 calibrated voices</li>
-            <li>Per-operator Slack routing</li>
-            <li>Studio roll-up ledger</li>
-            <li>Quarterly calibration review</li>
-            <li>HubSpot upsert + deal sync</li>
-          </ul>
-          <a href="#request-access" class="btn btn-primary" style="width:100%; justify-content:center;">Get Early Access</a>
-        </div>
-
-        <div class="pricing-card">
-          <div class="pricing-eyebrow">&nbsp;</div>
-          <div class="pricing-name">Agency</div>
-          <div class="pricing-price">$6,000<span>+/mo</span></div>
-          <div class="pricing-tagline">Unlimited voices. Multi-tenant. White-label. Bring your own CRM stack.</div>
-          <ul class="pricing-features">
-            <li>Unlimited operator voices</li>
-            <li>White-label deployment</li>
-            <li>Affinity / DealCloud / HubSpot API</li>
-            <li>SOC 2 documentation pack</li>
-            <li>Dedicated calibrator</li>
-          </ul>
-          <a href="#request-access" class="btn btn-outline" style="width:100%; justify-content:center;">Contact Us</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Section 04 — In Production ── -->
-  <section class="section section-production" id="in-production">
-    <div class="section-inner">
-      <div class="fade-up">
-        <p class="section-label">04 — In Production</p>
-        <h2 class="section-title">We dogfood it. On five brands.</h2>
-      </div>
-
-      <div class="quote-card fade-up">
-        <p class="quote-text">
-          "We built Amplify because we needed it. Claude drafts, we approve in Slack, every
-          action writes to the ledger. It's not a thought experiment — it runs our outbound today."
+        <p class="section-label">§C — Audit ledger</p>
+        <h2 class="section-title">The last ten events. Live, blinded, chained.</h2>
+        <p class="section-intro">
+          Every action — signal scored, draft generated, approval granted, post
+          published — writes to an HMAC-chained ledger. Operators, brands, and
+          post IDs are blinded server-side before the feed reaches this page.
+          The chain head is shown below so a technical buyer can verify the
+          architecture.
         </p>
-        <div class="quote-sig-name">Kevin Bibelhausen</div>
-        <div class="quote-sig-role">Founder, Studio B</div>
+      </div>
+
+      <div class="ledger-frame fade-up">
+        <div class="ledger-frame-head">
+          <span>Exhibit C — marketing:ledger:chain · tail 10</span>
+          <span id="ledger-generated-at">Loading…</span>
+        </div>
+
+        <table class="ledger-table" aria-label="Audit ledger tail">
+          <thead>
+            <tr>
+              <th>Timestamp (UTC)</th>
+              <th>Signal</th>
+              <th>Event</th>
+              <th>Operator</th>
+              <th>Brand</th>
+              <th>Score</th>
+              <th>Action</th>
+              <th>Hash</th>
+            </tr>
+          </thead>
+          <tbody id="ledger-rows">
+            <!-- Populated by JS from /public/feed. Fallback rows rendered if fetch fails. -->
+          </tbody>
+        </table>
+
+        <div class="ledger-chain-head">
+          <span>Chain head (HMAC-SHA256)</span>
+          <span class="hash-value" id="ledger-chain-head">—</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ── Section 05 — Request Access ── -->
+  <!-- ── §D Schedule of Fees ── -->
+  <section class="section section-fees" id="sec-d-fees">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">§D — Schedule of fees</p>
+        <h2 class="section-title">Three tiers. Flat pricing. No overage.<sup class="fn-ref"><a href="#fn-3">³</a></sup></h2>
+        <p class="section-intro">
+          The approval loop and the ledger are in every tier. That's the
+          product, not a premium feature. BYOH (bring your own HubSpot) is the
+          default; managed HubSpot Starter is a $250/mo add-on.
+        </p>
+      </div>
+
+      <div class="fade-up">
+        <div class="fees-table-wrap">
+          <table class="fees-table" id="fees-table" aria-label="Schedule of Fees">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Monthly</th>
+                <th>Min term</th>
+                <th>Brand cap</th>
+                <th>Approval gate SLA</th>
+                <th>Audit retention</th>
+                <th>Export format</th>
+              </tr>
+            </thead>
+            <tbody id="fees-body">
+              <!-- Server-side fallback: identical to /public/pricing response. -->
+              <tr>
+                <td class="fees-tier">Operator</td>
+                <td class="fees-price">$600<span>/mo</span></td>
+                <td>none</td>
+                <td>1–3 brands</td>
+                <td>—</td>
+                <td>12 mo</td>
+                <td>JSON</td>
+              </tr>
+              <tr>
+                <td class="fees-tier">Pro</td>
+                <td class="fees-price">$2,500<span>/mo</span></td>
+                <td>none</td>
+                <td>Up to 10 brands</td>
+                <td>Priority</td>
+                <td>36 mo</td>
+                <td>JSON + CSV</td>
+              </tr>
+              <tr>
+                <td class="fees-tier">Agency</td>
+                <td class="fees-price">$6,500<span>/mo</span></td>
+                <td>12 mo</td>
+                <td>Unlimited</td>
+                <td>Priority + SLO</td>
+                <td>36 mo</td>
+                <td>JSON + CSV + PGP-signed quarterly</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fees-footnote">
+          Add-on: Managed HubSpot Starter +$250/mo. Flat tier — no per-seat, no
+          per-post, no overage.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── §E Compliance (DARK) ── -->
+  <section class="section dark section-compliance" id="sec-e-compliance">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">§E — Compliance</p>
+        <h2 class="section-title">Your account. Your data. Your audit trail.</h2>
+        <p class="section-intro">
+          Three exhibits buyers read in order: is my LinkedIn at risk, what can
+          Amplify see, and what does the agency control surface look like.
+        </p>
+      </div>
+
+      <div class="compliance-grid fade-up">
+        <div class="exhibit-card">
+          <div class="exhibit-card-head">§E.1 — LinkedIn safety</div>
+          <div class="exhibit-card-title">Your account is not at risk.</div>
+          <div class="exhibit-card-body">
+            <p>
+              Amplify is scheduled via Slack and published through authenticated
+              LinkedIn API access (when approved — see methodology<sup class="fn-ref"><a href="#fn-1">¹</a></sup>).
+              Never a scraped session, never a stolen cookie, never a headless
+              browser logged in as you.
+            </p>
+            <p>
+              <strong>Your account is not at risk because we don't touch it
+              in a way LinkedIn punishes.</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="exhibit-card">
+          <div class="exhibit-card-head">§E.2 — Privacy</div>
+          <div class="exhibit-card-title">What Amplify sees, and what it doesn't.</div>
+          <div class="exhibit-card-body">
+            <p>
+              <strong>Sees:</strong> public LinkedIn signals (profile, posts,
+              engagement), drafts you generate through the Slack app, metadata
+              your CRM already holds.
+            </p>
+            <p>
+              <strong>Does not see:</strong> your DMs, your saved items, your
+              connections' private profiles, any email you haven't explicitly
+              connected.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up">
+        <div class="exhibit-card-head" style="margin-bottom: 0.75rem;">§E.3 — Agency multi-brand control surface</div>
+        <p class="section-intro" style="margin-bottom: 1.25rem;">
+          The Agency tier's unified dashboard. One ledger search across every
+          brand you run. Per-brand voice config status at a glance.
+        </p>
+
+        <div class="agency-mock">
+          <div class="agency-mock-head">
+            <div class="agency-mock-title">Unified ledger search · 5 brands</div>
+            <div class="agency-mock-search">search across all brands · event, operator, hash…</div>
+          </div>
+
+          <div class="agency-grid">
+            <div class="agency-cell agency-header">Brand</div>
+            <div class="agency-cell agency-header">Events today</div>
+            <div class="agency-cell agency-header">Drafts pending</div>
+            <div class="agency-cell agency-header">Approval rate</div>
+            <div class="agency-cell agency-header">Voice config</div>
+
+            <div class="agency-cell agency-brand">#brand-apex</div>
+            <div class="agency-cell">47 events</div>
+            <div class="agency-cell">12 drafts</div>
+            <div class="agency-cell">94%</div>
+            <div class="agency-cell"><span class="agency-status-dot green"></span>Calibrated</div>
+
+            <div class="agency-cell agency-brand">#brand-beacon</div>
+            <div class="agency-cell">31 events</div>
+            <div class="agency-cell">6 drafts</div>
+            <div class="agency-cell">88%</div>
+            <div class="agency-cell"><span class="agency-status-dot green"></span>Calibrated</div>
+
+            <div class="agency-cell agency-brand">#brand-cantor</div>
+            <div class="agency-cell">58 events</div>
+            <div class="agency-cell">9 drafts</div>
+            <div class="agency-cell">91%</div>
+            <div class="agency-cell"><span class="agency-status-dot amber"></span>Needs refresh</div>
+
+            <div class="agency-cell agency-brand">#brand-delta</div>
+            <div class="agency-cell">22 events</div>
+            <div class="agency-cell">4 drafts</div>
+            <div class="agency-cell">96%</div>
+            <div class="agency-cell"><span class="agency-status-dot green"></span>Calibrated</div>
+
+            <div class="agency-cell agency-brand">#brand-echo</div>
+            <div class="agency-cell">39 events</div>
+            <div class="agency-cell">11 drafts</div>
+            <div class="agency-cell">89%</div>
+            <div class="agency-cell"><span class="agency-status-dot green"></span>Calibrated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── §F Receipts ── -->
+  <section class="section section-receipts" id="sec-f-receipts">
+    <div class="section-inner">
+      <div class="fade-up">
+        <p class="section-label">§F — In production<sup class="fn-ref"><a href="#fn-2">²</a></sup></p>
+        <h2 class="section-title">Who's running it today.</h2>
+      </div>
+
+      <!--
+        TODO(kevin): confirm blinded principal counts for the three external
+        deployments below before this PR merges. Current values are
+        placeholders drawn from production memory; swap in exact N before
+        shipping if known.
+      -->
+      <p class="receipts-body fade-up">
+        Studio B's own 5-brand portfolio. One specialized agency (Luminary,
+        506(c) GPs) running a cohort of fund principals. One holdco-comms team
+        running portfolio-company CEOs. One vertical comms shop running
+        executives under its brand.
+      </p>
+
+      <div class="receipts-list fade-up">
+        <div class="receipt-cell">
+          <div class="receipt-cell-label">Deployment 01 · internal</div>
+          <div class="receipt-cell-line">
+            Studio B, 5 brands. Every outbound post in 2026 published through
+            the Amplify loop.
+          </div>
+        </div>
+        <div class="receipt-cell">
+          <div class="receipt-cell-label">Deployment 02 · agency</div>
+          <div class="receipt-cell-line">
+            Luminary, 506(c) GPs. Fund principals' personal brands on a
+            compliance-first configuration.
+          </div>
+        </div>
+        <div class="receipt-cell">
+          <div class="receipt-cell-label">Deployment 03 · partner</div>
+          <div class="receipt-cell-line">
+            Partner-held brand. Multi-brand holdco running executives
+            under one approval channel.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footnotes ── -->
+  <section class="section-footnotes">
+    <div class="section-inner">
+      <div class="footnotes-title">Footnotes</div>
+      <ol class="footnotes-list">
+        <li id="fn-1">
+          Intelligence = signal scoring + calibrated drafting + approval
+          gating. No cold outreach, no unsolicited DMs, no bot-to-bot
+          engagement. Full methodology at
+          <a href="#sec-e-compliance" style="color:var(--violet);text-decoration:none;">§E</a>.
+        </li>
+        <li id="fn-2">
+          In production as of 2026-04-21: Studio B, Ästhetik/Heritage Fabrics,
+          Weathervane Hill, Amplify itself, and a partner-held brand. Plus
+          Luminary (506(c) GPs) as the first external agency deployment.
+        </li>
+        <li id="fn-3">
+          Schedule of Fees current as of <span id="fees-as-of">2026-04-21</span>.
+          Flat tier, no overage, no per-seat. Minimum terms and SLAs in
+          <a href="#sec-d-fees" style="color:var(--violet);text-decoration:none;">§D</a>.
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── Schedule of Exhibits ── -->
+  <section class="section-exhibits">
+    <div class="section-inner">
+      <div class="exhibits-title">Schedule of Exhibits</div>
+      <ul class="exhibits-list">
+        <li><span class="lead"><a href="#sec-a-loop">§A — The loop</a></span><span class="dots"></span><span class="page">above the fold</span></li>
+        <li><span class="lead"><a href="#sec-b-how">§B — How it works</a></span><span class="dots"></span><span class="page">p. 1</span></li>
+        <li><span class="lead"><a href="#sec-c-ledger">§C — Audit ledger, last 10 events</a></span><span class="dots"></span><span class="page">p. 2</span></li>
+        <li><span class="lead"><a href="#sec-d-fees">§D — Schedule of fees</a></span><span class="dots"></span><span class="page">p. 3</span></li>
+        <li><span class="lead"><a href="#sec-e-compliance">§E — Compliance (safety + privacy + agency)</a></span><span class="dots"></span><span class="page">p. 4</span></li>
+        <li><span class="lead"><a href="#sec-f-receipts">§F — Receipts</a></span><span class="dots"></span><span class="page">p. 5</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Request access ── -->
   <section class="section section-access" id="request-access">
     <div class="section-inner">
       <div class="fade-up">
         <p class="section-label">Request access</p>
         <h2 class="section-title">Join the waitlist.</h2>
-        <p class="section-intro" style="margin-bottom: 2.5rem;">Private beta for agencies and operators. We'll get back within 48 hours.</p>
+        <p class="section-intro" style="margin-bottom: 2.5rem;">
+          Private beta for agencies and operators. We'll get back within 48 hours.
+        </p>
       </div>
 
       <div class="access-grid fade-up">
@@ -1254,7 +1291,7 @@
             <ul class="timeline-steps">
               <li class="timeline-step">
                 <div class="timeline-bullet">
-                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
@@ -1266,7 +1303,7 @@
               </li>
               <li class="timeline-step">
                 <div class="timeline-bullet">
-                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
@@ -1278,7 +1315,7 @@
               </li>
               <li class="timeline-step">
                 <div class="timeline-bullet">
-                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
@@ -1290,7 +1327,7 @@
               </li>
               <li class="timeline-step">
                 <div class="timeline-bullet">
-                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
@@ -1302,7 +1339,7 @@
               </li>
               <li class="timeline-step">
                 <div class="timeline-bullet">
-                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
@@ -1335,28 +1372,162 @@
   </footer>
 
   <script>
-    // HubSpot form
-    hbspt.forms.create({
-      region: "na1",
-      portalId: "49070660",
-      formId: "ea2c2f4a-4e71-4dd5-8747-814c87634f5c",
-      target: "#waitlist-form",
-      cssClass: "hs-form-amplify"
-    });
+    // Fallback 4 complement: flip off no-js so CSS can animate for JS users.
+    document.documentElement.classList.remove('no-js');
 
-    // Scroll animations
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+    const ENGINE_BASE = 'https://amplify-production-0924.up.railway.app';
+
+    // ── Audit ledger (§C) ───────────────────────────────────────────
+    const FALLBACK_LEDGER = {
+      sample: true,
+      rows: [
+        { ts: '2026-04-21T14:32:17Z', id: 'SIG041912', event_type: 'post.scored',        operator: '[operator-1]', score: 0.78, action: 'published',  hash: '7f22e1a4c9b1a0d3' },
+        { ts: '2026-04-21T14:18:02Z', id: 'SIG041911', event_type: 'engagement.drafted', operator: '[operator-2]', score: 0.64, action: 'drafted',    hash: '92c4b0ff1ea7d08c' },
+        { ts: '2026-04-21T13:51:44Z', id: 'SIG041910', event_type: 'approval.granted',   operator: '[operator-1]', score: null, action: 'approved',   hash: 'b18e2d5f4c119033' },
+        { ts: '2026-04-21T13:44:11Z', id: 'SIG041909', event_type: 'post.published',     operator: '[operator-3]', score: null, action: 'published',  hash: 'a0d391c7ee4b8815' }
+      ],
+      chain_head: '7f22e1a4c9b1a0d3e6f7c8a9b0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9',
+      generated_at: new Date().toISOString()
+    };
+
+    function fmtUtc(iso) {
+      try {
+        const d = new Date(iso);
+        const pad = (n) => String(n).padStart(2, '0');
+        return d.getUTCFullYear() + '-' + pad(d.getUTCMonth()+1) + '-' + pad(d.getUTCDate())
+             + ' ' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + ' UTC';
+      } catch (e) { return iso || '—'; }
+    }
+
+    function renderLedger(data, isSample) {
+      const tbody = document.getElementById('ledger-rows');
+      const chainEl = document.getElementById('ledger-chain-head');
+      const genEl = document.getElementById('ledger-generated-at');
+      tbody.innerHTML = '';
+
+      const rows = (data.rows || []).slice(-10);
+      if (rows.length === 0) return;
+
+      rows.forEach((row, i) => {
+        const tr = document.createElement('tr');
+        const sigId = row.id ? ('SIG-' + String(row.id).replace(/[^A-Za-z0-9]/g,'').slice(0,8).toUpperCase()) : ('SIG-' + String(i).padStart(4,'0'));
+        const hashShort = row.hash ? (String(row.hash).slice(0,8) + '…') : '—';
+        const hashFull = row.hash || '';
+        const score = (row.score === null || row.score === undefined) ? '—' : Number(row.score).toFixed(2);
+        const operator = row.operator || '[operator-?]';
+
+        tr.innerHTML =
+          '<td>' + fmtUtc(row.ts) + '</td>' +
+          '<td>' + sigId + '</td>' +
+          '<td>' + (row.event_type || '—') + '</td>' +
+          '<td>' + operator + '</td>' +
+          '<td><span class="ledger-redacted">████████</span></td>' +
+          '<td>' + score + '</td>' +
+          '<td>' + (row.action || '—') + '</td>' +
+          '<td><span class="ledger-hash" title="' + hashFull.replace(/"/g,'') + '">' + hashShort + '</span></td>';
+        tbody.appendChild(tr);
+      });
+
+      const head = data.chain_head || '';
+      const headShort = head ? (head.slice(0,12) + '…') : '—';
+      chainEl.textContent = headShort;
+      chainEl.title = head;
+
+      const gen = data.generated_at ? fmtUtc(data.generated_at) : '—';
+      genEl.innerHTML = 'Generated ' + gen + (isSample ? '<span class="ledger-sample-flag">Sample</span>' : '');
+    }
+
+    function loadLedger() {
+      fetch(ENGINE_BASE + '/public/feed', { cache: 'no-cache', mode: 'cors' })
+        .then((r) => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then((data) => {
+          if (!data || !Array.isArray(data.rows) || data.rows.length === 0) {
+            renderLedger(FALLBACK_LEDGER, true);
+          } else {
+            renderLedger(data, false);
           }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    );
+        })
+        .catch(() => renderLedger(FALLBACK_LEDGER, true));
+    }
 
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    // ── Schedule of Fees (§D) ───────────────────────────────────────
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => (
+        { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]
+      ));
+    }
+    function renderFees(tiers) {
+      const tbody = document.getElementById('fees-body');
+      if (!Array.isArray(tiers) || tiers.length === 0) return;
+      tbody.innerHTML = tiers.map((t) => {
+        const monthly = '$' + Number(t.monthly).toLocaleString('en-US');
+        return '<tr>'
+          + '<td class="fees-tier">' + escapeHtml(t.name) + '</td>'
+          + '<td class="fees-price">' + monthly + '<span>/mo</span></td>'
+          + '<td>' + escapeHtml(t.minimum_term || '—') + '</td>'
+          + '<td>' + escapeHtml(t.brand_cap_label || (t.brand_cap == null ? 'Unlimited' : t.brand_cap)) + '</td>'
+          + '<td>' + escapeHtml(t.approval_gate_sla || '—') + '</td>'
+          + '<td>' + escapeHtml((t.audit_retention_months || '—') + ' mo') + '</td>'
+          + '<td>' + escapeHtml(t.export_format || '—') + '</td>'
+          + '</tr>';
+      }).join('');
+    }
+    function loadPricing() {
+      fetch(ENGINE_BASE + '/public/pricing', { cache: 'no-cache', mode: 'cors' })
+        .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then((data) => {
+          if (data && Array.isArray(data.tiers) && data.tiers.length) {
+            renderFees(data.tiers);
+          }
+          // On failure / empty, inlined fallback (matching Draft 01) stays.
+        })
+        .catch(() => { /* keep inlined fallback */ });
+    }
+
+    // ── HubSpot form ────────────────────────────────────────────────
+    if (window.hbspt && window.hbspt.forms) {
+      hbspt.forms.create({
+        region: 'na1',
+        portalId: '49070660',
+        formId: 'ea2c2f4a-4e71-4dd5-8747-814c87634f5c',
+        target: '#waitlist-form',
+        cssClass: 'hs-form-amplify'
+      });
+    }
+
+    // ── Fade-in (four-fallback safety net) ──────────────────────────
+    (function () {
+      const els = document.querySelectorAll('.fade-up');
+
+      // Fallback 1: no IntersectionObserver → reveal immediately.
+      if (!('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('visible'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+        els.forEach((el) => observer.observe(el));
+      }
+
+      // Fallback 2: belt-and-suspenders — reveal anything left after 1.5s.
+      setTimeout(() => {
+        document.querySelectorAll('.fade-up:not(.visible)').forEach((el) => el.classList.add('visible'));
+      }, 1500);
+    })();
+
+    // Kick off live fetches.
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLedger();
+      loadPricing();
+    });
   </script>
 
 </body>
