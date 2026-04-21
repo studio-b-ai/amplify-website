@@ -604,30 +604,145 @@
       padding-bottom: 0.85rem;
       border-bottom: 1px solid var(--border);
     }
-    .hs-form-amplify { font-family: 'Inter', sans-serif; }
-    .hs-form-amplify label { font-size: 0.78rem; font-weight: 600; color: var(--ink); letter-spacing: 0.03em; }
-    .hs-form-amplify input,
+    /* HubSpot form — hard overrides to match Amplify brand. HubSpot injects
+       its own classes at runtime, so everything here uses !important. */
+    .hs-form-amplify,
+    .hs-form-amplify * {
+      font-family: 'Inter', sans-serif !important;
+      box-sizing: border-box;
+    }
+    .hs-form-amplify fieldset {
+      max-width: none !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .hs-form-amplify .hs-form-field {
+      margin-bottom: 1.1rem !important;
+      padding: 0 !important;
+    }
+    .hs-form-amplify .form-columns-1,
+    .hs-form-amplify .form-columns-2,
+    .hs-form-amplify .form-columns-3 {
+      display: grid !important;
+      gap: 1rem !important;
+      max-width: none !important;
+    }
+    .hs-form-amplify .form-columns-1 { grid-template-columns: 1fr !important; }
+    .hs-form-amplify .form-columns-2 { grid-template-columns: 1fr 1fr !important; }
+    .hs-form-amplify .form-columns-3 { grid-template-columns: 1fr 1fr 1fr !important; }
+    @media (max-width: 640px) {
+      .hs-form-amplify .form-columns-2,
+      .hs-form-amplify .form-columns-3 { grid-template-columns: 1fr !important; }
+    }
+    .hs-form-amplify .hs-form-field > label,
+    .hs-form-amplify label.hs-main-font-element {
+      display: block !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.62rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.14em !important;
+      text-transform: uppercase !important;
+      color: var(--ink-60) !important;
+      margin-bottom: 0.45rem !important;
+    }
+    .hs-form-amplify label .hs-form-required {
+      color: var(--violet) !important;
+      margin-left: 0.2rem !important;
+    }
+    .hs-form-amplify input[type="text"],
+    .hs-form-amplify input[type="email"],
+    .hs-form-amplify input[type="tel"],
+    .hs-form-amplify input[type="number"],
+    .hs-form-amplify input[type="url"],
     .hs-form-amplify select,
     .hs-form-amplify textarea {
-      font-family: 'Inter', sans-serif; font-size: 0.95rem;
-      padding: 0.7rem 0.9rem; border: 1px solid var(--border-mid);
-      border-radius: 0; background: var(--white); color: var(--ink);
-      width: 100%; margin-top: 0.35rem;
+      width: 100% !important;
+      max-width: none !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.95rem !important;
+      font-weight: 500 !important;
+      color: var(--ink) !important;
+      background: var(--white) !important;
+      border: 1.5px solid var(--border-mid) !important;
+      border-radius: 0 !important;
+      padding: 0.75rem 0.9rem !important;
+      line-height: 1.4 !important;
+      transition: border-color 0.15s, box-shadow 0.15s !important;
+      box-shadow: none !important;
     }
+    .hs-form-amplify textarea { min-height: 100px !important; resize: vertical !important; }
     .hs-form-amplify input:focus,
-    .hs-form-amplify textarea:focus,
-    .hs-form-amplify select:focus {
-      outline: none; border-color: var(--violet); box-shadow: 0 0 0 3px var(--violet-15);
+    .hs-form-amplify select:focus,
+    .hs-form-amplify textarea:focus {
+      outline: none !important;
+      border-color: var(--violet) !important;
+      box-shadow: 0 0 0 3px var(--violet-15) !important;
     }
-    .hs-form-amplify .hs-button {
-      background: var(--violet); color: var(--white); font-weight: 700;
-      border: none; padding: 0.85rem 1.5rem; cursor: pointer;
-      font-size: 0.95rem; border-radius: 0;
-      letter-spacing: 0.02em;
+    .hs-form-amplify input::placeholder,
+    .hs-form-amplify textarea::placeholder { color: var(--ink-40) !important; }
+
+    .hs-form-amplify .hs-submit { margin-top: 1.5rem !important; }
+    .hs-form-amplify .actions { padding: 0 !important; margin: 0 !important; }
+    .hs-form-amplify .hs-button,
+    .hs-form-amplify input[type="submit"].hs-button {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: auto !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.02em !important;
+      color: var(--white) !important;
+      background: var(--violet) !important;
+      border: 1.5px solid var(--violet) !important;
+      border-radius: 0 !important;
+      padding: 0.85rem 1.75rem !important;
+      cursor: pointer !important;
+      text-transform: none !important;
+      box-shadow: none !important;
+      transition: background 0.15s, border-color 0.15s !important;
     }
-    .hs-form-amplify .hs-button:hover { background: var(--violet-dark); }
-    .hs-form-amplify .hs-error-msgs { color: var(--mark-stroke); font-size: 0.78rem; list-style: none; padding: 0; margin-top: 0.4rem; }
-    .hs-form-amplify .hs-form-field { margin-bottom: 1rem; }
+    .hs-form-amplify .hs-button:hover,
+    .hs-form-amplify input[type="submit"].hs-button:hover {
+      background: var(--violet-dark) !important;
+      border-color: var(--violet-dark) !important;
+    }
+
+    .hs-form-amplify .hs-error-msgs,
+    .hs-form-amplify .hs-error-msg {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0.4rem 0 0 !important;
+      color: var(--mark-stroke) !important;
+      font-size: 0.78rem !important;
+      font-weight: 500 !important;
+    }
+    .hs-form-amplify .inputs-list {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .hs-form-amplify .hs-form-checkbox label,
+    .hs-form-amplify .hs-form-radio label,
+    .hs-form-amplify .hs-form-booleancheckbox label {
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 0.5rem !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.88rem !important;
+      font-weight: 400 !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      color: var(--ink-80) !important;
+      margin-bottom: 0.4rem !important;
+    }
+    .hs-form-amplify .legal-consent-container {
+      margin-top: 1rem !important;
+      font-size: 0.82rem !important;
+      color: var(--ink-60) !important;
+    }
 
     .timeline-card {
       background: var(--white);
@@ -713,10 +828,12 @@
   <nav class="nav">
     <a href="/" class="nav-brand" aria-label="Amplify by Studio B — home">
       <svg class="nav-brand-mark" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M 2 12 L 8 6 L 8 18 Z
-                 M 8.5 8 L 13.5 12 L 8.5 16 L 10.5 12 Z
-                 M 15 6 L 21 12 L 15 18 L 17.5 12 Z"
-              fill="#1F3B2E" stroke="#6B1824" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M 2 12 L 8 6 L 8 18 Z"
+              fill="#7C3AED"/>
+        <path d="M 8.5 8 L 13.5 12 L 8.5 16 L 10.5 12 Z"
+              fill="#7C3AED" opacity="0.65"/>
+        <path d="M 15 6 L 21 12 L 15 18 L 17.5 12 Z"
+              fill="#7C3AED" opacity="0.35"/>
       </svg>
       <div>
         <div class="nav-brand-name">Amplify</div>
@@ -1134,7 +1251,7 @@
   <footer class="footer">
     <p class="footer-copy">
       &copy; 2026 Studio B. Amplify is a Studio B product. LinkedIn,
-      HubSpot, PhantomBuster, and Slack are trademarks of their respective
+      HubSpot, Slack, and LinkedIn are trademarks of their respective
       owners. <strong>The fine print:</strong> prices and terms shown here
       are current as of 2026-04-21; minimum terms and SLAs are in the
       order form you sign. The audit ledger shown on this page is the
