@@ -1681,6 +1681,134 @@
     }
 
     // ── HubSpot form ────────────────────────────────────────────────
+    // HubSpot injects its own stylesheet AFTER this inline <style> block,
+    // so equal-specificity rules in the inline block lose the cascade.
+    // Inject a second <style> tag at end-of-body so ours runs last.
+    (function injectFormStyleOverride() {
+      const css = [
+        '#waitlist-form form,',
+        '#waitlist-form form * { font-family: "Inter", sans-serif !important; box-sizing: border-box !important; }',
+        '#waitlist-form form { margin: 0 !important; }',
+        '#waitlist-form form fieldset { max-width: none !important; border: none !important; padding: 0 !important; margin: 0 !important; }',
+        '#waitlist-form form .hs-form-field, #waitlist-form form .field { margin-bottom: 1.35rem !important; padding: 0 !important; }',
+        '#waitlist-form form .form-columns-1, #waitlist-form form .form-columns-2, #waitlist-form form .form-columns-3 { display: grid !important; gap: 1rem !important; max-width: none !important; margin: 0 !important; }',
+        '#waitlist-form form .form-columns-1 { grid-template-columns: 1fr !important; }',
+        '#waitlist-form form .form-columns-2 { grid-template-columns: 1fr 1fr !important; }',
+        '#waitlist-form form .form-columns-3 { grid-template-columns: 1fr 1fr 1fr !important; }',
+        '#waitlist-form form .hs-form-field .input, #waitlist-form form .hs-form-field .input > * { margin: 0 !important; max-width: none !important; }',
+        '@media (max-width: 640px) { #waitlist-form form .form-columns-2, #waitlist-form form .form-columns-3 { grid-template-columns: 1fr !important; } }',
+        '#waitlist-form form .hs-form-field > label,',
+        '#waitlist-form form label.hs-main-font-element,',
+        '#waitlist-form form legend.hs-field-desc {',
+        '  display: block !important; font-family: "JetBrains Mono", monospace !important;',
+        '  font-size: 0.62rem !important; font-weight: 600 !important;',
+        '  letter-spacing: 0.16em !important; text-transform: uppercase !important;',
+        '  color: #0F0A1E !important; opacity: 0.6 !important;',
+        '  margin: 0 0 0.55rem !important; line-height: 1.3 !important;',
+        '}',
+        '#waitlist-form form label span.hs-form-required { color: #7C3AED !important; opacity: 1 !important; margin-left: 0.25rem !important; font-weight: 700 !important; }',
+        '#waitlist-form form .hs-field-desc { font-family: "Inter", sans-serif !important; font-size: 0.78rem !important; color: rgba(15,10,30,0.6) !important; opacity: 1 !important; text-transform: none !important; letter-spacing: 0 !important; margin-top: 0.4rem !important; }',
+        '#waitlist-form form input[type="text"],',
+        '#waitlist-form form input[type="email"],',
+        '#waitlist-form form input[type="tel"],',
+        '#waitlist-form form input[type="number"],',
+        '#waitlist-form form input[type="url"],',
+        '#waitlist-form form input[type="password"],',
+        '#waitlist-form form select,',
+        '#waitlist-form form textarea,',
+        '#waitlist-form form .hs-input {',
+        '  width: 100% !important; max-width: none !important; display: block !important;',
+        '  font-family: "Inter", sans-serif !important; font-size: 1rem !important;',
+        '  font-weight: 500 !important; color: #0F0A1E !important;',
+        '  background: #FFFFFF !important; border: 1.5px solid #D4CCF0 !important;',
+        '  border-radius: 0 !important; padding: 0.85rem 1rem !important;',
+        '  line-height: 1.4 !important; box-shadow: none !important;',
+        '  -webkit-appearance: none !important; appearance: none !important;',
+        '  height: auto !important; margin: 0 !important;',
+        '  transition: border-color 0.15s, box-shadow 0.15s !important;',
+        '}',
+        '#waitlist-form form textarea, #waitlist-form form textarea.hs-input { min-height: 120px !important; resize: vertical !important; line-height: 1.55 !important; }',
+        '#waitlist-form form input:focus, #waitlist-form form select:focus, #waitlist-form form textarea:focus, #waitlist-form form .hs-input:focus {',
+        '  outline: none !important; border-color: #7C3AED !important; box-shadow: 0 0 0 3px rgba(124,58,237,0.15) !important;',
+        '}',
+        '#waitlist-form form input:hover:not(:focus), #waitlist-form form select:hover:not(:focus), #waitlist-form form textarea:hover:not(:focus) { border-color: rgba(15,10,30,0.4) !important; }',
+        '#waitlist-form form .hs-input.invalid, #waitlist-form form .hs-input.error { border-color: #6B1824 !important; }',
+        '#waitlist-form form input::placeholder, #waitlist-form form textarea::placeholder { color: rgba(15,10,30,0.4) !important; font-weight: 400 !important; opacity: 1 !important; }',
+        '#waitlist-form form select {',
+        '  background-image: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\' viewBox=\'0 0 12 8\'><path d=\'M1 1l5 5 5-5\' fill=\'none\' stroke=\'%237C3AED\' stroke-width=\'2\'/></svg>") !important;',
+        '  background-repeat: no-repeat !important; background-position: right 1rem center !important; padding-right: 2.5rem !important;',
+        '}',
+        '#waitlist-form form .hs-submit { margin-top: 1.75rem !important; padding-top: 1.5rem !important; border-top: 1px solid #E8E4F5 !important; }',
+        '#waitlist-form form .actions { padding: 0 !important; margin: 0 !important; }',
+        '#waitlist-form form .hs-button,',
+        '#waitlist-form form input[type="submit"].hs-button,',
+        '#waitlist-form form input[type="submit"],',
+        '#waitlist-form form button.hs-button {',
+        '  display: block !important; width: 100% !important;',
+        '  font-family: "Inter", sans-serif !important; font-size: 1rem !important;',
+        '  font-weight: 700 !important; letter-spacing: 0.02em !important;',
+        '  color: #FFFFFF !important; background: #7C3AED !important;',
+        '  border: 1.5px solid #7C3AED !important; border-radius: 0 !important;',
+        '  padding: 1rem 1.5rem !important; cursor: pointer !important;',
+        '  text-transform: none !important; box-shadow: none !important;',
+        '  -webkit-appearance: none !important; appearance: none !important;',
+        '  text-align: center !important; line-height: 1.2 !important;',
+        '  background-image: none !important;',
+        '  transition: background 0.15s, border-color 0.15s !important;',
+        '}',
+        '#waitlist-form form .hs-button:hover, #waitlist-form form input[type="submit"]:hover { background: #6D28D9 !important; border-color: #6D28D9 !important; }',
+        '#waitlist-form form .inputs-list, #waitlist-form form ul.inputs-list { list-style: none !important; padding: 0 !important; margin: 0 !important; }',
+        '#waitlist-form form .hs-form-checkbox label, #waitlist-form form .hs-form-radio label, #waitlist-form form .hs-form-booleancheckbox label {',
+        '  display: flex !important; align-items: flex-start !important; gap: 0.6rem !important;',
+        '  font-family: "Inter", sans-serif !important; font-size: 0.88rem !important;',
+        '  font-weight: 400 !important; text-transform: none !important; letter-spacing: 0 !important;',
+        '  color: rgba(15,10,30,0.8) !important; opacity: 1 !important; line-height: 1.5 !important;',
+        '  margin: 0 !important; cursor: pointer !important;',
+        '}',
+        '#waitlist-form form input[type="checkbox"], #waitlist-form form input[type="radio"] {',
+        '  width: 16px !important; height: 16px !important; min-width: 16px !important;',
+        '  margin: 0.15rem 0 0 !important; padding: 0 !important;',
+        '  accent-color: #7C3AED !important; border: 1.5px solid #D4CCF0 !important;',
+        '}',
+        '#waitlist-form form .legal-consent-container {',
+        '  margin-top: 1.25rem !important; padding-top: 1.25rem !important;',
+        '  border-top: 1px solid #E8E4F5 !important;',
+        '  font-size: 0.8rem !important; color: rgba(15,10,30,0.6) !important; line-height: 1.55 !important;',
+        '}',
+        '#waitlist-form form .legal-consent-container a { color: #7C3AED !important; text-decoration: underline !important; }',
+        '#waitlist-form form .hs-error-msgs, #waitlist-form form .hs-error-msg, #waitlist-form form label.hs-error-msg {',
+        '  list-style: none !important; padding: 0 !important; margin: 0.45rem 0 0 !important;',
+        '  color: #6B1824 !important; opacity: 1 !important;',
+        '  font-size: 0.78rem !important; font-weight: 500 !important;',
+        '  font-family: "Inter", sans-serif !important;',
+        '  text-transform: none !important; letter-spacing: 0 !important;',
+        '}',
+        '#waitlist-form .submitted-message {',
+        '  padding: 1.25rem !important; background: #F5F3FF !important;',
+        '  border-left: 3px solid #7C3AED !important;',
+        '  font-size: 0.95rem !important; color: #0F0A1E !important; line-height: 1.55 !important;',
+        '}'
+      ].join('\n');
+      const style = document.createElement('style');
+      style.id = 'hs-form-amplify-overrides';
+      style.textContent = css;
+      document.body.appendChild(style);
+    })();
+
+    // Keep the submit button text set to "Request access →" — HubSpot may
+    // re-render it on validation or state change, so we observe and reapply.
+    function applySubmitLabel(root) {
+      if (!root) return;
+      const submit = root.querySelector('input[type="submit"], button.hs-button, .hs-button');
+      if (!submit) return;
+      const label = 'Request access →';
+      if (submit.tagName === 'INPUT' && 'value' in submit) {
+        if (submit.value !== label) submit.value = label;
+      } else {
+        if (submit.textContent !== label) submit.textContent = label;
+      }
+    }
+
     if (window.hbspt && window.hbspt.forms) {
       hbspt.forms.create({
         region: 'na1',
@@ -1694,12 +1822,9 @@
               ? $form[0]
               : document.querySelector('#waitlist-form form');
             if (!root) return;
-            const submit = root.querySelector('input[type="submit"], button[type="submit"], .hs-button');
-            if (submit) {
-              const label = 'Request access →';
-              if ('value' in submit && submit.tagName === 'INPUT') submit.value = label;
-              else submit.textContent = label;
-            }
+
+            applySubmitLabel(root);
+
             root.querySelectorAll('input, textarea').forEach((el) => {
               if (!el.placeholder) {
                 const n = (el.name || '').toLowerCase();
@@ -1711,6 +1836,17 @@
                 else if (n.includes('phone')) el.placeholder = 'Optional';
               }
             });
+
+            // Observe the form for re-renders (HubSpot mutates on validation
+            // + state transitions and can revert our submit label).
+            const host = document.getElementById('waitlist-form');
+            if (host && 'MutationObserver' in window) {
+              const obs = new MutationObserver(() => {
+                const r = host.querySelector('form');
+                if (r) applySubmitLabel(r);
+              });
+              obs.observe(host, { childList: true, subtree: true, attributes: true, attributeFilter: ['value'] });
+            }
           } catch (e) { /* non-fatal */ }
         }
       });
