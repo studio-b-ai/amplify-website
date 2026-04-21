@@ -795,38 +795,178 @@
       padding-bottom: 0.9rem;
       border-bottom: 1px solid var(--border);
     }
+    /* ── HubSpot form — Amplify Prospectus branding ──
+       HubSpot injects its own markup; every selector below is !important to
+       defeat HubSpot's inline + cascade styles. Grouped by: form shell,
+       field wrappers, inputs (text/select/textarea/phone), labels + required,
+       checkboxes, help + error + legal, submit button, success state. */
+    .hs-form-amplify,
+    .hs-form-amplify form {
+      font-family: 'Inter', sans-serif !important;
+      color: var(--ink) !important;
+    }
+    .hs-form-amplify fieldset {
+      max-width: 100% !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 0 0.75rem 0 !important;
+    }
+    .hs-form-amplify fieldset.form-columns-2 {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0.75rem !important;
+    }
+    .hs-form-amplify fieldset.form-columns-2 .hs-form-field { width: auto !important; float: none !important; padding: 0 !important; }
+    .hs-form-amplify fieldset.form-columns-1 .hs-form-field { width: 100% !important; float: none !important; padding: 0 !important; }
+    .hs-form-amplify .input { margin-right: 0 !important; }
+    .hs-form-amplify .hs-form-field {
+      margin-bottom: 0.9rem !important;
+    }
+
+    /* Inputs: text, email, tel, url, number, password */
     .hs-form-amplify .hs-input {
       width: 100% !important;
+      box-sizing: border-box !important;
       font-family: 'Inter', sans-serif !important;
       font-size: 0.9rem !important;
+      line-height: 1.4 !important;
       padding: 0.7rem 0.875rem !important;
       border: 1.5px solid var(--border) !important;
       border-radius: 0 !important;
       background: var(--white) !important;
       color: var(--ink) !important;
       outline: none !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      transition: border-color 120ms ease !important;
     }
-    .hs-form-amplify .hs-input:focus { border-color: var(--violet) !important; }
-    .hs-form-amplify .hs-button {
+    .hs-form-amplify .hs-input::placeholder { color: var(--ink-40) !important; }
+    .hs-form-amplify .hs-input:focus,
+    .hs-form-amplify .hs-input:focus-visible {
+      border-color: var(--violet) !important;
+      box-shadow: 0 0 0 3px var(--violet-15) !important;
+    }
+    .hs-form-amplify textarea.hs-input {
+      min-height: 120px !important;
+      resize: vertical !important;
+      font-family: 'Inter', sans-serif !important;
+    }
+    /* Select dropdowns — restore a custom chevron since we killed native appearance */
+    .hs-form-amplify select.hs-input {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%230F0A1E' stroke-width='1.5'/></svg>") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 0.875rem center !important;
+      padding-right: 2rem !important;
+    }
+    /* International phone component */
+    .hs-form-amplify .hs-fieldtype-intl-phone .hs-input { width: 100% !important; }
+    .hs-form-amplify .hs-fieldtype-intl-phone select.hs-input {
+      width: 30% !important;
+      min-width: 110px !important;
+    }
+    .hs-form-amplify .hs-fieldtype-intl-phone input.hs-input { width: 68% !important; }
+
+    /* Labels + required asterisk */
+    .hs-form-amplify label,
+    .hs-form-amplify .hs-form-field > label {
+      display: block !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.78rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.02em !important;
+      color: var(--ink) !important;
+      margin-bottom: 0.4rem !important;
+    }
+    .hs-form-amplify .hs-form-required { color: var(--violet) !important; margin-left: 2px !important; }
+
+    /* Checkboxes + radio inputs-list */
+    .hs-form-amplify .inputs-list { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+    .hs-form-amplify .inputs-list li { margin-bottom: 0.3rem !important; }
+    .hs-form-amplify .hs-form-booleancheckbox-display,
+    .hs-form-amplify .hs-form-checkbox-display,
+    .hs-form-amplify .hs-form-radio-display {
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 0.55rem !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 400 !important;
+      color: var(--ink-60) !important;
+      margin-bottom: 0 !important;
+    }
+    .hs-form-amplify input[type="checkbox"],
+    .hs-form-amplify input[type="radio"] {
+      width: 1rem !important;
+      height: 1rem !important;
+      margin-top: 0.2rem !important;
+      accent-color: var(--violet) !important;
+      cursor: pointer !important;
+    }
+
+    /* Help text + error + legal + richtext */
+    .hs-form-amplify .hs-field-desc {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.75rem !important;
+      color: var(--ink-40) !important;
+      margin-top: 0.25rem !important;
+    }
+    .hs-form-amplify .hs-error-msgs,
+    .hs-form-amplify .hs-error-msg {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0.3rem 0 0 0 !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.75rem !important;
+      color: #DC2626 !important;
+    }
+    .hs-form-amplify .legal-consent-container,
+    .hs-form-amplify .hs-richtext,
+    .hs-form-amplify .hs-richtext p {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.78rem !important;
+      line-height: 1.5 !important;
+      color: var(--ink-60) !important;
+    }
+    .hs-form-amplify .legal-consent-container a,
+    .hs-form-amplify .hs-richtext a {
+      color: var(--violet) !important;
+      text-decoration: underline !important;
+    }
+
+    /* Submit button */
+    .hs-form-amplify .hs-submit { margin-top: 0.5rem !important; }
+    .hs-form-amplify .hs-button,
+    .hs-form-amplify input[type="submit"] {
       font-family: 'Inter', sans-serif !important;
       font-weight: 700 !important;
       font-size: 0.9rem !important;
+      letter-spacing: 0.01em !important;
       background: var(--violet) !important;
       color: var(--white) !important;
       border: none !important;
       border-radius: 0 !important;
-      padding: 0.75rem 1.5rem !important;
+      padding: 0.85rem 1.75rem !important;
       cursor: pointer !important;
+      transition: background 120ms ease !important;
+      text-transform: none !important;
     }
-    .hs-form-amplify .hs-button:hover { background: var(--violet-dark) !important; }
-    .hs-form-amplify label {
+    .hs-form-amplify .hs-button:hover,
+    .hs-form-amplify input[type="submit"]:hover { background: var(--violet-dark) !important; }
+    .hs-form-amplify .hs-button:focus-visible {
+      outline: 2px solid var(--violet) !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Success state after submit */
+    .hs-form-amplify .submitted-message,
+    .hs-form-amplify .hs_cos_wrapper_type_form .submitted-message {
       font-family: 'Inter', sans-serif !important;
-      font-size: 0.8rem !important;
-      font-weight: 500 !important;
+      font-size: 0.95rem !important;
       color: var(--ink) !important;
+      background: var(--violet-04) !important;
+      border-left: 3px solid var(--violet) !important;
+      padding: 1rem 1.25rem !important;
     }
-    .hs-form-amplify .hs-field-desc { font-size: 0.75rem !important; color: var(--ink-40) !important; }
-    .hs-form-amplify .hs-error-msgs { font-size: 0.75rem !important; color: #DC2626 !important; list-style: none !important; }
 
     .timeline-card { background: var(--ground); border: 1px solid var(--border); padding: 2rem; }
     .timeline-title {
