@@ -591,34 +591,50 @@
     }
     @media (max-width: 880px) { .access-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
 
+    /* Form frame — editorial, not a card. Violet top bar is the signal. */
     .form-wrap {
       background: var(--white);
       border: 1px solid var(--border);
-      padding: 2rem;
+      border-top: 3px solid var(--violet);
+      padding: 2.5rem 2.25rem 2.25rem;
+      position: relative;
     }
     .form-wrap-head {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 1.65rem;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin-bottom: 0.45rem;
+    }
+    .form-wrap-sub {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
       color: var(--violet);
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.85rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
       border-bottom: 1px solid var(--border);
     }
-    /* HubSpot form — hard overrides to match Amplify brand. HubSpot injects
-       its own classes at runtime, so everything here uses !important. */
+
+    /* HubSpot form — hard overrides across every class HubSpot injects. */
     .hs-form-amplify,
     .hs-form-amplify * {
       font-family: 'Inter', sans-serif !important;
-      box-sizing: border-box;
+      box-sizing: border-box !important;
     }
+    .hs-form-amplify form { margin: 0 !important; }
     .hs-form-amplify fieldset {
       max-width: none !important;
       border: none !important;
       padding: 0 !important;
       margin: 0 !important;
     }
-    .hs-form-amplify .hs-form-field {
-      margin-bottom: 1.1rem !important;
+    .hs-form-amplify .hs-form-field,
+    .hs-form-amplify .field {
+      margin-bottom: 1.35rem !important;
       padding: 0 !important;
     }
     .hs-form-amplify .form-columns-1,
@@ -627,121 +643,226 @@
       display: grid !important;
       gap: 1rem !important;
       max-width: none !important;
+      margin: 0 !important;
     }
     .hs-form-amplify .form-columns-1 { grid-template-columns: 1fr !important; }
     .hs-form-amplify .form-columns-2 { grid-template-columns: 1fr 1fr !important; }
     .hs-form-amplify .form-columns-3 { grid-template-columns: 1fr 1fr 1fr !important; }
+    .hs-form-amplify .hs-form-field .input,
+    .hs-form-amplify .hs-form-field .input > * { margin: 0 !important; max-width: none !important; }
     @media (max-width: 640px) {
       .hs-form-amplify .form-columns-2,
       .hs-form-amplify .form-columns-3 { grid-template-columns: 1fr !important; }
     }
+
+    /* Labels — all-caps mono, sits cleanly above input. */
     .hs-form-amplify .hs-form-field > label,
-    .hs-form-amplify label.hs-main-font-element {
+    .hs-form-amplify label.hs-main-font-element,
+    .hs-form-amplify .hs-field-desc + label,
+    .hs-form-amplify legend.hs-field-desc {
       display: block !important;
       font-family: 'JetBrains Mono', monospace !important;
       font-size: 0.62rem !important;
       font-weight: 600 !important;
-      letter-spacing: 0.14em !important;
+      letter-spacing: 0.16em !important;
       text-transform: uppercase !important;
       color: var(--ink-60) !important;
-      margin-bottom: 0.45rem !important;
+      margin: 0 0 0.5rem !important;
+      line-height: 1.3 !important;
     }
+    .hs-form-amplify label span { color: inherit !important; }
     .hs-form-amplify label .hs-form-required {
       color: var(--violet) !important;
-      margin-left: 0.2rem !important;
+      margin-left: 0.25rem !important;
+      font-weight: 700 !important;
     }
+    .hs-form-amplify .hs-field-desc {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.78rem !important;
+      color: var(--ink-60) !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      margin-top: 0.35rem !important;
+    }
+
+    /* Inputs — bare white, hard edges, 1.5px border, violet focus ring. */
     .hs-form-amplify input[type="text"],
     .hs-form-amplify input[type="email"],
     .hs-form-amplify input[type="tel"],
     .hs-form-amplify input[type="number"],
     .hs-form-amplify input[type="url"],
+    .hs-form-amplify input[type="password"],
     .hs-form-amplify select,
-    .hs-form-amplify textarea {
+    .hs-form-amplify textarea,
+    .hs-form-amplify .hs-input {
       width: 100% !important;
       max-width: none !important;
+      display: block !important;
       font-family: 'Inter', sans-serif !important;
-      font-size: 0.95rem !important;
+      font-size: 1rem !important;
       font-weight: 500 !important;
       color: var(--ink) !important;
       background: var(--white) !important;
       border: 1.5px solid var(--border-mid) !important;
       border-radius: 0 !important;
-      padding: 0.75rem 0.9rem !important;
+      padding: 0.8rem 0.95rem !important;
       line-height: 1.4 !important;
       transition: border-color 0.15s, box-shadow 0.15s !important;
       box-shadow: none !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      height: auto !important;
+      margin: 0 !important;
     }
-    .hs-form-amplify textarea { min-height: 100px !important; resize: vertical !important; }
+    .hs-form-amplify textarea,
+    .hs-form-amplify textarea.hs-input {
+      min-height: 120px !important;
+      resize: vertical !important;
+      line-height: 1.55 !important;
+    }
     .hs-form-amplify input:focus,
     .hs-form-amplify select:focus,
-    .hs-form-amplify textarea:focus {
+    .hs-form-amplify textarea:focus,
+    .hs-form-amplify .hs-input:focus {
       outline: none !important;
       border-color: var(--violet) !important;
       box-shadow: 0 0 0 3px var(--violet-15) !important;
     }
+    .hs-form-amplify input:hover,
+    .hs-form-amplify select:hover,
+    .hs-form-amplify textarea:hover {
+      border-color: var(--ink-40) !important;
+    }
+    .hs-form-amplify .hs-input.invalid,
+    .hs-form-amplify .hs-input.error {
+      border-color: var(--mark-stroke) !important;
+    }
     .hs-form-amplify input::placeholder,
-    .hs-form-amplify textarea::placeholder { color: var(--ink-40) !important; }
+    .hs-form-amplify textarea::placeholder {
+      color: var(--ink-40) !important;
+      font-weight: 400 !important;
+    }
+    /* Select caret in violet */
+    .hs-form-amplify select {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%237C3AED' stroke-width='2'/></svg>") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 1rem center !important;
+      padding-right: 2.5rem !important;
+    }
 
-    .hs-form-amplify .hs-submit { margin-top: 1.5rem !important; }
+    /* Submit — full-width, prominent, with arrow chevron. */
+    .hs-form-amplify .hs-submit {
+      margin-top: 1.75rem !important;
+      padding-top: 1.5rem !important;
+      border-top: 1px solid var(--border) !important;
+    }
     .hs-form-amplify .actions { padding: 0 !important; margin: 0 !important; }
     .hs-form-amplify .hs-button,
-    .hs-form-amplify input[type="submit"].hs-button {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: auto !important;
+    .hs-form-amplify input[type="submit"].hs-button,
+    .hs-form-amplify input[type="submit"] {
+      display: block !important;
+      width: 100% !important;
       font-family: 'Inter', sans-serif !important;
-      font-size: 0.95rem !important;
+      font-size: 1rem !important;
       font-weight: 700 !important;
       letter-spacing: 0.02em !important;
       color: var(--white) !important;
       background: var(--violet) !important;
       border: 1.5px solid var(--violet) !important;
       border-radius: 0 !important;
-      padding: 0.85rem 1.75rem !important;
+      padding: 1rem 1.5rem !important;
       cursor: pointer !important;
       text-transform: none !important;
       box-shadow: none !important;
-      transition: background 0.15s, border-color 0.15s !important;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      text-align: center !important;
     }
     .hs-form-amplify .hs-button:hover,
-    .hs-form-amplify input[type="submit"].hs-button:hover {
+    .hs-form-amplify input[type="submit"]:hover {
       background: var(--violet-dark) !important;
       border-color: var(--violet-dark) !important;
     }
-
-    .hs-form-amplify .hs-error-msgs,
-    .hs-form-amplify .hs-error-msg {
-      list-style: none !important;
-      padding: 0 !important;
-      margin: 0.4rem 0 0 !important;
-      color: var(--mark-stroke) !important;
-      font-size: 0.78rem !important;
-      font-weight: 500 !important;
+    .hs-form-amplify .hs-button:active {
+      transform: translateY(1px) !important;
     }
-    .hs-form-amplify .inputs-list {
+
+    /* Checkboxes, radios, legal consent. */
+    .hs-form-amplify .inputs-list,
+    .hs-form-amplify ul.inputs-list {
       list-style: none !important;
       padding: 0 !important;
       margin: 0 !important;
+    }
+    .hs-form-amplify .hs-form-checkbox,
+    .hs-form-amplify .hs-form-radio,
+    .hs-form-amplify .hs-form-booleancheckbox {
+      margin-bottom: 0.5rem !important;
     }
     .hs-form-amplify .hs-form-checkbox label,
     .hs-form-amplify .hs-form-radio label,
     .hs-form-amplify .hs-form-booleancheckbox label {
       display: flex !important;
       align-items: flex-start !important;
-      gap: 0.5rem !important;
+      gap: 0.6rem !important;
       font-family: 'Inter', sans-serif !important;
       font-size: 0.88rem !important;
       font-weight: 400 !important;
       text-transform: none !important;
       letter-spacing: 0 !important;
       color: var(--ink-80) !important;
-      margin-bottom: 0.4rem !important;
+      line-height: 1.5 !important;
+      margin: 0 !important;
+      cursor: pointer !important;
     }
+    .hs-form-amplify input[type="checkbox"],
+    .hs-form-amplify input[type="radio"] {
+      width: 16px !important;
+      height: 16px !important;
+      min-width: 16px !important;
+      margin: 0.15rem 0 0 !important;
+      padding: 0 !important;
+      accent-color: var(--violet) !important;
+      border: 1.5px solid var(--border-mid) !important;
+    }
+
+    /* Legal / consent block. */
     .hs-form-amplify .legal-consent-container {
-      margin-top: 1rem !important;
-      font-size: 0.82rem !important;
+      margin-top: 1.25rem !important;
+      padding-top: 1.25rem !important;
+      border-top: 1px solid var(--border) !important;
+      font-size: 0.8rem !important;
       color: var(--ink-60) !important;
+      line-height: 1.55 !important;
+    }
+    .hs-form-amplify .legal-consent-container p { margin-bottom: 0.5rem !important; }
+    .hs-form-amplify .legal-consent-container a { color: var(--violet) !important; text-decoration: underline !important; }
+
+    /* Errors. */
+    .hs-form-amplify .hs-error-msgs,
+    .hs-form-amplify .hs-error-msg,
+    .hs-form-amplify label.hs-error-msg {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0.45rem 0 0 !important;
+      color: var(--mark-stroke) !important;
+      font-size: 0.78rem !important;
+      font-weight: 500 !important;
+      font-family: 'Inter', sans-serif !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+    }
+    .hs-form-amplify .hs-main-font-element + .hs-error-msgs li label { color: var(--mark-stroke) !important; }
+
+    /* Post-submit thank-you. */
+    .hs-form-amplify .submitted-message {
+      padding: 1.25rem !important;
+      background: var(--surface) !important;
+      border-left: 3px solid var(--violet) !important;
+      font-size: 0.95rem !important;
+      color: var(--ink) !important;
+      line-height: 1.55 !important;
     }
 
     .timeline-card {
@@ -1191,7 +1312,8 @@
       <div class="access-grid">
         <div class="fade-up">
           <div class="form-wrap">
-            <div class="form-wrap-head">Waitlist intake</div>
+            <div class="form-wrap-sub">Private beta · invite only</div>
+            <div class="form-wrap-head">Request access.</div>
             <div id="waitlist-form"></div>
           </div>
         </div>
@@ -1565,7 +1687,32 @@
         portalId: '49070660',
         formId: 'ea2c2f4a-4e71-4dd5-8747-814c87634f5c',
         target: '#waitlist-form',
-        cssClass: 'hs-form-amplify'
+        cssClass: 'hs-form-amplify',
+        onFormReady: function ($form) {
+          try {
+            const root = (typeof $form !== 'undefined' && $form && $form.length)
+              ? $form[0]
+              : document.querySelector('#waitlist-form form');
+            if (!root) return;
+            const submit = root.querySelector('input[type="submit"], button[type="submit"], .hs-button');
+            if (submit) {
+              const label = 'Request access →';
+              if ('value' in submit && submit.tagName === 'INPUT') submit.value = label;
+              else submit.textContent = label;
+            }
+            root.querySelectorAll('input, textarea').forEach((el) => {
+              if (!el.placeholder) {
+                const n = (el.name || '').toLowerCase();
+                if (n.includes('email')) el.placeholder = 'you@company.com';
+                else if (n.includes('firstname')) el.placeholder = 'First';
+                else if (n.includes('lastname')) el.placeholder = 'Last';
+                else if (n.includes('company')) el.placeholder = 'Company';
+                else if (n.includes('jobtitle')) el.placeholder = 'Role';
+                else if (n.includes('phone')) el.placeholder = 'Optional';
+              }
+            });
+          } catch (e) { /* non-fatal */ }
+        }
       });
     }
 
