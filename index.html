@@ -585,22 +585,122 @@
       line-height: 1.5;
     }
 
-    /* ── Voice A/B placeholder (§ sec-voice-ab — filled in PR C) ── */
-    .section-voice-ab-placeholder {
+    /* ── §B Voice A/B (sec-voice-ab) ── */
+    .section-voice-ab {
       background: var(--surface-alt);
-      padding: 2.5rem 2rem;
+      padding: 3.5rem 2rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-    .voice-ab-placeholder-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 1.5rem;
+    .voice-ab-inner { max-width: 1200px; margin: 0 auto; }
+    .voice-ab-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-40);
+      margin-bottom: 0.6rem;
+    }
+    .voice-ab-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900; font-size: 1.65rem; line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      max-width: 720px;
+    }
+    .voice-ab-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.98rem; line-height: 1.55;
+      color: var(--ink-60);
+      max-width: 720px;
+      margin-bottom: 1.75rem;
+    }
+    .voice-ab-intro strong { color: var(--ink); font-weight: 600; }
+    .voice-ab-rows {
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .voice-ab-row {
+      border: 1px solid var(--border);
+      background: var(--white);
+      padding: 1.1rem 1.25rem 1.25rem;
+    }
+    .voice-ab-row-header {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-60);
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.95rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap;
+    }
+    .voice-ab-row-header .sig-id {
+      color: var(--violet);
+      font-weight: 600;
+    }
+    .voice-ab-cols {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .voice-ab-col { display: flex; flex-direction: column; gap: 0.5rem; }
+    .voice-ab-col-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--ink-40);
     }
-    .voice-ab-placeholder-inner strong { color: var(--violet); font-weight: 600; }
+    .voice-ab-col-generic .voice-ab-col-label { color: var(--ink-40); }
+    .voice-ab-col-calibrated .voice-ab-col-label { color: var(--violet); }
+    .voice-ab-col-voice .voice-ab-col-label { color: var(--ink-40); }
+
+    .voice-ab-text-generic {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; line-height: 1.5;
+      color: var(--ink-60);
+      background: var(--surface-alt);
+      border: 1px dashed var(--border-mid);
+      padding: 0.75rem 0.85rem;
+      flex: 1;
+    }
+    .voice-ab-text-calibrated {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.98rem; font-weight: 500; line-height: 1.5;
+      color: var(--ink);
+      background: var(--violet-04);
+      border: 1px solid var(--violet);
+      border-left: 3px solid var(--violet);
+      padding: 0.75rem 0.85rem;
+      flex: 1;
+    }
+    .voice-ab-text-calibrated .persona-tag {
+      display: block;
+      margin-top: 0.55rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.1em;
+      color: var(--violet);
+    }
+    .voice-ab-text-voice {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 0.95rem; line-height: 1.5;
+      color: var(--ink);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--ink-40);
+      padding: 0.75rem 0.85rem;
+      flex: 1;
+    }
+    .voice-ab-sample-flag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--violet);
+      background: var(--violet-08);
+      padding: 0.1rem 0.45rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    @media (max-width: 900px) {
+      .voice-ab-cols { grid-template-columns: 1fr; }
+    }
 
     /* ── Schedule of Exhibits ── */
     .section-exhibits { background: var(--white); padding: 3.5rem 2rem; }
@@ -974,11 +1074,21 @@
     </div>
   </section>
 
-  <!-- ── Voice A/B placeholder (PR C) ── -->
-  <section class="section-voice-ab-placeholder" id="sec-voice-ab" aria-label="Voice calibration A/B — ships in PR C">
-    <div class="voice-ab-placeholder-inner">
-      <div>§ voice-ab &nbsp;·&nbsp; <strong>Voice calibration A/B</strong> &nbsp;·&nbsp; Generic LLM vs. Amplify-calibrated</div>
-      <div>Ships PR C</div>
+  <!-- ── §B Voice A/B (sec-voice-ab) ── -->
+  <section class="section-voice-ab" id="sec-voice-ab" aria-label="Voice calibration A/B — generic LLM vs Amplify-calibrated">
+    <div class="voice-ab-inner">
+      <p class="voice-ab-label">§ voice-ab &nbsp;·&nbsp; Voice calibration · Week 1</p>
+      <h2 class="voice-ab-title">The same signal. Two drafts. One sounds like you.</h2>
+      <p class="voice-ab-intro">
+        The #1 buyer anxiety is <strong>"this bot sounds wrong under my name."</strong>
+        Three recent signals. On the left, what you'd get from a generic LLM with
+        no brand voice. In the middle, what Amplify drafted for the operator it
+        routed to. On the right, the brand-voice exemplar that steered the draft.
+      </p>
+
+      <div class="voice-ab-rows" id="voice-ab-rows" aria-live="polite">
+        <!-- Rows injected by loadCalibration(); inline fallback below matches shape. -->
+      </div>
     </div>
   </section>
 
@@ -1524,10 +1634,106 @@
       }, 1500);
     })();
 
+    // ── Voice A/B (§B) ──────────────────────────────────────────────
+    // Three curated inline fallbacks, shape-compatible with
+    // /public/calibration-examples. Used when the fetch fails or returns no
+    // examples. The synthetic flag is mirrored from the engine's response.
+    const FALLBACK_CALIBRATION = {
+      sample: true,
+      examples: [
+        {
+          signal_id: 'SIG-0419',
+          signal_summary: 'VP of Supply Chain at ████████ posts about inventory-turn KPIs',
+          generic_draft: 'Great post! Supply chain KPIs are so important. We should connect — I help companies with their inventory strategies.',
+          calibrated_draft: 'Inventory turn as a blunt KPI is how you get warehouse teams gaming intake dates. Days-of-cover by SKU class tells you the actual story.',
+          persona: '[operator-1]',
+          brand_voice_snippet: 'Specificity beats superlatives. Name the failure mode before naming the fix. Never claim expertise — show the mechanics.',
+          is_synthetic: true
+        },
+        {
+          signal_id: 'SIG-0420',
+          signal_summary: 'Acumatica VAR partner at ████████ posts about a rough publishBegin timeout',
+          generic_draft: 'Sorry to hear about the rough afternoon! Customization publishes can be tricky. Happy to help if you want to chat about it.',
+          calibrated_draft: 'Hit the same 240s publishBegin hang last month — PXPageIndexingService timing out on co-published ISV packages. Pulled them from projectNames and it cleared in 90s.',
+          persona: '[operator-1]',
+          brand_voice_snippet: 'First-person operator voice. When I tell a VAR their publishBegin timed out, it\'s because it happened to us on PR #415 on a Wednesday at 2pm.',
+          is_synthetic: true
+        },
+        {
+          signal_id: 'SIG-0421',
+          signal_summary: 'Implementation consultant at ████████ posts about Ship Via changes in 24R.200',
+          generic_draft: 'That sounds frustrating! Upgrades can introduce unexpected changes. You should always test before deploying.',
+          calibrated_draft: 'Same on 24R.200 — the Ship Via list dropped three carriers in the minor release with no callout. Go to CS207000 and reactivate anything that flipped inactive.',
+          persona: '[operator-2]',
+          brand_voice_snippet: 'Day-to-day functional consultant register. Name the screen (CS207000), the field, the release notes gap. Not strategy — implementation.',
+          is_synthetic: true
+        }
+      ]
+    };
+
+    function renderCalibration(data, isSample) {
+      const host = document.getElementById('voice-ab-rows');
+      if (!host) return;
+      const examples = (data && Array.isArray(data.examples)) ? data.examples : [];
+      if (examples.length === 0) return;
+
+      host.innerHTML = examples.map((ex) => {
+        const sigId = escapeHtml(ex.signal_id || 'SIG-????');
+        const summary = escapeHtml(ex.signal_summary || '—');
+        const generic = escapeHtml(ex.generic_draft || '—');
+        const calibrated = escapeHtml(ex.calibrated_draft || '—');
+        const persona = escapeHtml(ex.persona || '[operator-?]');
+        const voice = escapeHtml(ex.brand_voice_snippet || '—');
+        const flag = (isSample || ex.is_synthetic)
+          ? '<span class="voice-ab-sample-flag">' + (isSample ? 'Sample' : 'Synthetic') + '</span>'
+          : '';
+        return (
+          '<div class="voice-ab-row">' +
+            '<div class="voice-ab-row-header">' +
+              '<span class="sig-id">' + sigId + '</span>' +
+              '<span>·</span>' +
+              '<span>' + summary + '</span>' +
+              flag +
+            '</div>' +
+            '<div class="voice-ab-cols">' +
+              '<div class="voice-ab-col voice-ab-col-generic">' +
+                '<div class="voice-ab-col-label">Generic LLM draft</div>' +
+                '<div class="voice-ab-text-generic">' + generic + '</div>' +
+              '</div>' +
+              '<div class="voice-ab-col voice-ab-col-calibrated">' +
+                '<div class="voice-ab-col-label">Amplify-calibrated</div>' +
+                '<div class="voice-ab-text-calibrated">' + calibrated +
+                  '<span class="persona-tag">— ' + persona + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="voice-ab-col voice-ab-col-voice">' +
+                '<div class="voice-ab-col-label">Brand-voice reference</div>' +
+                '<div class="voice-ab-text-voice">' + voice + '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function loadCalibration() {
+      fetch(ENGINE_BASE + '/public/calibration-examples', { cache: 'no-cache', mode: 'cors' })
+        .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then((data) => {
+          if (!data || !Array.isArray(data.examples) || data.examples.length === 0) {
+            renderCalibration(FALLBACK_CALIBRATION, true);
+          } else {
+            renderCalibration(data, false);
+          }
+        })
+        .catch(() => renderCalibration(FALLBACK_CALIBRATION, true));
+    }
+
     // Kick off live fetches.
     document.addEventListener('DOMContentLoaded', () => {
       loadLedger();
       loadPricing();
+      loadCalibration();
     });
   </script>
 
